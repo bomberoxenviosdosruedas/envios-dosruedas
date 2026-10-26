@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { Calculator, MapPin, Sparkles, Clock, Phone } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 export default function CtaSection() {
   return (
     <section className="relative bg-brand-blue-500 text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Patrón de fondo */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(#FFEC01_1px,transparent_1px)] [background-size:20px_20px]" />
-      </div>
+      {/* Fondo procedimental de topología vial */}
+      <HeroProceduralBackground />
 
       <div className="max-w-5xl mx-auto relative z-10 text-center space-y-8">
         <div className="inline-flex items-center gap-2 bg-brand-yellow-500 text-brand-blue-500 font-subheading uppercase text-xs md:text-sm px-4 py-1.5 rounded-full font-bold shadow-xs">

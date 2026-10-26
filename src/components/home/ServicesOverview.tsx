@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { Zap, Truck, Sparkles, Clock, Calculator, ArrowRight, Check } from 'lucide-react';
+import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 const mainServices = [
   {
@@ -90,89 +92,86 @@ export default function ServicesOverview() {
           {mainServices.map((srv) => {
             const Icon = srv.icon;
             return (
-              <div
+              <DoubleBezelCard
                 key={srv.id}
-                className={`double-bezel-outer transition-all duration-200 hover:-translate-y-2 ${
-                  srv.featured ? 'ring-2 ring-brand-yellow-500 shadow-tinted-md' : ''
-                }`}
+                outerClassName={srv.featured ? 'ring-2 ring-brand-yellow-500 shadow-md' : ''}
+                innerClassName="flex flex-col justify-between h-full p-6 md:p-8 space-y-6"
               >
-                <div className="double-bezel-inner flex flex-col justify-between h-full p-6 md:p-8 space-y-6">
-                  {/* Encabezado y Badges */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-2xl bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <span
-                        className={`font-subheading text-xs uppercase tracking-wider px-3 py-1 rounded-full ${srv.badgeClass}`}
-                      >
-                        {srv.badge}
-                      </span>
+                {/* Encabezado y Badges */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center">
+                      <Icon className="w-6 h-6" />
                     </div>
-
-                    <h3 className="font-display text-3xl uppercase text-brand-blue-500 mb-1">
-                      {srv.name}
-                    </h3>
-                    <p className="font-subheading text-base font-bold uppercase tracking-wide text-brand-blue-400 mb-4">
-                      {srv.subtitle}
-                    </p>
-
-                    {/* Caja de Precio e Info de Corte */}
-                    <div className="bg-brand-blue-50/70 rounded-2xl p-4 border border-brand-blue-100/60 mb-6 space-y-2">
-                      <div className="flex items-baseline justify-between">
-                        <span className="text-xs font-sans text-brand-blue-400">Tarifa base</span>
-                        <div className="text-right">
-                          <span className="font-mono text-3xl font-bold text-brand-blue-500">
-                            {srv.price}
-                          </span>
-                        </div>
-                      </div>
-                      <p className="font-sans text-xs text-brand-blue-400 border-t border-brand-blue-100/40 pt-2">
-                        {srv.priceNote}
-                      </p>
-                      <div className="flex items-center gap-1.5 text-xs font-mono text-brand-blue-500 font-semibold pt-1">
-                        <Clock className="w-3.5 h-3.5 text-brand-yellow-500 shrink-0" />
-                        <span>Horario de corte: {srv.corte}</span>
-                      </div>
-                    </div>
-
-                    <p className="font-sans text-sm text-brand-blue-400 leading-relaxed mb-6">
-                      {srv.tagline}
-                    </p>
-
-                    {/* Lista de Features */}
-                    <ul className="space-y-3 border-t border-brand-blue-50 pt-4">
-                      {srv.features.map((feat) => (
-                        <li key={feat} className="flex items-start gap-2.5 text-xs font-sans text-brand-blue-500">
-                          <Check className="w-4 h-4 text-brand-yellow-500 shrink-0 mt-0.5" />
-                          <span>{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <span
+                      className={`font-subheading text-xs uppercase tracking-wider px-3 py-1 rounded-full ${srv.badgeClass}`}
+                    >
+                      {srv.badge}
+                    </span>
                   </div>
 
-                  {/* Acciones */}
-                  <div className="space-y-2.5 pt-4">
-                    <Link
-                      href={srv.quoteHref}
-                      className={`w-full py-3.5 px-4 rounded-xl font-subheading uppercase text-lg font-bold tracking-wider transition-all duration-200 flex items-center justify-center gap-2 ${
-                        srv.featured
-                          ? 'bg-brand-yellow-500 hover:bg-brand-yellow-400 text-brand-blue-500 shadow-accent-sm'
-                          : 'bg-brand-blue-500 hover:bg-brand-blue-400 text-white'
-                      }`}
-                    >
-                      <Calculator className="w-4 h-4" /> Cotizar Este Servicio
-                    </Link>
-                    <Link
-                      href={srv.ctaHref}
-                      className="w-full text-center py-2 text-xs font-subheading uppercase font-bold text-brand-blue-400 hover:text-brand-blue-500 flex items-center justify-center gap-1 transition-colors"
-                    >
-                      <span>Ver detalles y radios de entrega</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                  <h3 className="font-display text-3xl uppercase text-brand-blue-500 mb-1">
+                    {srv.name}
+                  </h3>
+                  <p className="font-subheading text-base font-bold uppercase tracking-wide text-brand-blue-400 mb-4">
+                    {srv.subtitle}
+                  </p>
+
+                  {/* Caja de Precio e Info de Corte */}
+                  <div className="bg-brand-blue-50/70 rounded-2xl p-4 border border-brand-blue-100/60 mb-6 space-y-2">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs font-sans text-brand-blue-400">Tarifa base</span>
+                      <div className="text-right">
+                        <span className="font-mono text-3xl font-bold text-brand-blue-500">
+                          {srv.price}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="font-sans text-xs text-brand-blue-400 border-t border-brand-blue-100/40 pt-2">
+                      {srv.priceNote}
+                    </p>
+                    <div className="flex items-center gap-1.5 text-xs font-mono text-brand-blue-500 font-semibold pt-1">
+                      <Clock className="w-3.5 h-3.5 text-brand-yellow-500 shrink-0" />
+                      <span>Horario de corte: {srv.corte}</span>
+                    </div>
                   </div>
+
+                  <p className="font-sans text-sm text-brand-blue-400 leading-relaxed mb-6">
+                    {srv.tagline}
+                  </p>
+
+                  {/* Lista de Features */}
+                  <ul className="space-y-3 border-t border-brand-blue-50 pt-4">
+                    {srv.features.map((feat) => (
+                      <li key={feat} className="flex items-start gap-2.5 text-xs font-sans text-brand-blue-500">
+                        <Check className="w-4 h-4 text-brand-yellow-500 shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+
+                {/* Acciones */}
+                <div className="space-y-2.5 pt-4">
+                  <CTANestedPill
+                    href={srv.quoteHref}
+                    variant={srv.featured ? 'primary' : 'outline'}
+                    size="default"
+                    className="w-full"
+                    icon={<Calculator className="w-4 h-4" />}
+                    iconPosition="left"
+                  >
+                    Cotizar Este Servicio
+                  </CTANestedPill>
+                  <Link
+                    href={srv.ctaHref}
+                    className="w-full text-center py-2 text-xs font-subheading uppercase font-bold text-brand-blue-400 hover:text-brand-blue-500 flex items-center justify-center gap-1 transition-colors"
+                  >
+                    <span>Ver detalles y radios de entrega</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </DoubleBezelCard>
             );
           })}
         </div>

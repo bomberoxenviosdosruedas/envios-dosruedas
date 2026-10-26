@@ -6,6 +6,8 @@ import {
   Share2,
 } from 'lucide-react';
 import { FaWhatsapp, FaInstagram, FaFacebookF } from 'react-icons/fa';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
+import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -73,10 +75,7 @@ export default function NuestrasRedesPage() {
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       {/* Hero */}
       <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <div 
-          className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:24px_24px]" 
-          aria-hidden="true" 
-        />
+        <HeroProceduralBackground />
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
             <Share2 className="w-3.5 h-3.5 text-brand-yellow-400" />
@@ -99,54 +98,56 @@ export default function NuestrasRedesPage() {
           {SOCIAL_CHANNELS.map((ch) => {
             const Icon = ch.icon;
             return (
-              <div key={ch.name} className="double-bezel-outer group h-full">
-                <div className="double-bezel-inner p-6 sm:p-8 bg-white h-full flex flex-col justify-between group-hover:border-brand-blue-300 transition-all">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold shadow-xs"
-                          style={{ backgroundColor: ch.color }}
-                        >
-                          <Icon className="w-6 h-6 stroke-[2.2]" />
-                        </div>
-                        <div>
-                          <h2 className="font-display text-2xl uppercase tracking-tight text-brand-blue-500">
-                            {ch.name}
-                          </h2>
-                          <span className="font-mono text-xs font-semibold text-brand-blue-400">
-                            {ch.handle}
-                          </span>
-                        </div>
+              <DoubleBezelCard
+                key={ch.name}
+                className="group h-full"
+                innerClassName="p-6 sm:p-8 bg-white h-full flex flex-col justify-between group-hover:border-brand-blue-300 transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold shadow-xs"
+                        style={{ backgroundColor: ch.color }}
+                      >
+                        <Icon className="w-6 h-6 stroke-[2.2]" />
                       </div>
-
-                      <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-brand-blue-50 text-brand-blue-500 border border-brand-blue-100">
-                        {ch.status}
-                      </span>
+                      <div>
+                        <h2 className="font-display text-2xl uppercase tracking-tight text-brand-blue-500">
+                          {ch.name}
+                        </h2>
+                        <span className="font-mono text-xs font-semibold text-brand-blue-400">
+                          {ch.handle}
+                        </span>
+                      </div>
                     </div>
 
-                    <p className="font-sans text-xs sm:text-sm text-brand-blue-400 leading-relaxed mb-6">
-                      {ch.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-brand-blue-100 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
-                      Oficial
+                    <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-brand-blue-50 text-brand-blue-500 border border-brand-blue-100">
+                      {ch.status}
                     </span>
-
-                    <a
-                      href={ch.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-blue-50 text-brand-blue-500 hover:bg-brand-blue-500 hover:text-white font-sans text-xs font-bold uppercase tracking-wider border border-brand-blue-200 transition-all shadow-xs"
-                    >
-                      <span>{ch.cta}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
                   </div>
+
+                  <p className="font-sans text-xs sm:text-sm text-brand-blue-400 leading-relaxed mb-6">
+                    {ch.description}
+                  </p>
                 </div>
-              </div>
+
+                <div className="pt-4 border-t border-brand-blue-100 flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
+                    Oficial
+                  </span>
+
+                  <a
+                    href={ch.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-blue-50 text-brand-blue-500 hover:bg-brand-blue-500 hover:text-white font-sans text-xs font-bold uppercase tracking-wider border border-brand-blue-200 transition-all shadow-xs"
+                  >
+                    <span>{ch.cta}</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </DoubleBezelCard>
             );
           })}
         </div>

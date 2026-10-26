@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { User, ShoppingBag, Building2, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
+import { Badge } from '@/components/ui/Badge';
 
 const segmentos = [
   {
@@ -67,59 +70,54 @@ export default function SegmentosHome() {
           {segmentos.map((seg) => {
             const Icon = seg.icon;
             return (
-              <div
+              <DoubleBezelCard
                 key={seg.title}
-                className={`double-bezel-outer transition-all duration-200 hover:-translate-y-1.5 ${
-                  seg.featured ? 'ring-2 ring-brand-yellow-500' : ''
-                }`}
+                outerClassName={seg.featured ? 'ring-2 ring-brand-yellow-500 shadow-md' : ''}
+                innerClassName="flex flex-col justify-between h-full space-y-6"
               >
-                <div className="double-bezel-inner flex flex-col justify-between h-full space-y-6">
-                  <div>
-                    {/* Header de la tarjeta */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-2xl bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center shadow-2xs">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-blue-500 bg-brand-yellow-500/30 px-3 py-1 rounded-full">
-                        {seg.badge}
-                      </span>
+                <div>
+                  {/* Header de la tarjeta */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center shadow-2xs">
+                      <Icon className="w-6 h-6" />
                     </div>
-
-                    <h3 className="font-display text-2xl uppercase text-brand-blue-500 mb-1">
-                      {seg.title}
-                    </h3>
-                    <p className="font-subheading text-sm font-bold uppercase tracking-wide text-brand-blue-400 mb-3">
-                      {seg.subtitle}
-                    </p>
-                    <p className="font-sans text-brand-blue-400 text-sm leading-relaxed mb-6">
-                      {seg.desc}
-                    </p>
-
-                    {/* Puntos destacados */}
-                    <ul className="space-y-2.5 pt-2 border-t border-brand-blue-50">
-                      {seg.points.map((pt) => (
-                        <li key={pt} className="flex items-start gap-2 text-xs font-sans text-brand-blue-500">
-                          <CheckCircle2 className="w-4 h-4 text-brand-yellow-500 shrink-0 mt-0.5" />
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <Badge variant={seg.featured ? 'urgent' : 'neutral'} size="sm">
+                      {seg.badge}
+                    </Badge>
                   </div>
 
-                  {/* Botón CTA */}
-                  <Link
-                    href={seg.ctaHref}
-                    className={`w-full text-center py-3 px-4 rounded-xl font-subheading uppercase text-base font-bold tracking-wider transition-all duration-200 flex items-center justify-center gap-1.5 ${
-                      seg.featured
-                        ? 'bg-brand-yellow-500 text-brand-blue-500 hover:bg-brand-yellow-400 shadow-accent-sm'
-                        : 'bg-brand-blue-500 text-white hover:bg-brand-blue-400'
-                    }`}
-                  >
-                    <span>{seg.ctaText}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  <h3 className="font-display text-2xl uppercase text-brand-blue-500 mb-1">
+                    {seg.title}
+                  </h3>
+                  <p className="font-subheading text-sm font-bold uppercase tracking-wide text-brand-blue-400 mb-3">
+                    {seg.subtitle}
+                  </p>
+                  <p className="font-sans text-brand-blue-400 text-sm leading-relaxed mb-6">
+                    {seg.desc}
+                  </p>
+
+                  {/* Puntos destacados */}
+                  <ul className="space-y-2.5 pt-2 border-t border-brand-blue-50">
+                    {seg.points.map((pt) => (
+                      <li key={pt} className="flex items-start gap-2 text-xs font-sans text-brand-blue-500">
+                        <CheckCircle2 className="w-4 h-4 text-brand-yellow-500 shrink-0 mt-0.5" />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+
+                {/* Botón CTA con Nested Pill */}
+                <CTANestedPill
+                  href={seg.ctaHref}
+                  variant={seg.featured ? 'primary' : 'outline'}
+                  size="default"
+                  className="w-full"
+                  icon={<ArrowRight className="w-4 h-4" />}
+                >
+                  {seg.ctaText}
+                </CTANestedPill>
+              </DoubleBezelCard>
             );
           })}
         </div>

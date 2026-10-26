@@ -14,6 +14,9 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import ServiceCta from '@/components/servicios/ServiceCta';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
+import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
+import { Badge } from '@/components/ui/Badge';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -97,10 +100,7 @@ export default function ServiciosPage() {
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       {/* Hero Section */}
       <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <div 
-          className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:24px_24px]" 
-          aria-hidden="true" 
-        />
+        <HeroProceduralBackground />
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
             <ShieldCheck className="w-3.5 h-3.5 text-brand-yellow-400" />
@@ -123,43 +123,45 @@ export default function ServiciosPage() {
           {SERVICES.map((s) => {
             const Icon = s.icon;
             return (
-              <div key={s.href} className="double-bezel-outer group h-full">
-                <div className="double-bezel-inner p-6 sm:p-7 bg-white h-full flex flex-col justify-between transition-all group-hover:border-brand-blue-300">
-                  <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-brand-blue-50 text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-brand-yellow-500 transition-colors flex items-center justify-center font-bold">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <span className="font-mono text-xs font-bold px-3 py-1 bg-brand-yellow-500/20 text-brand-blue-500 border border-brand-yellow-500/40 rounded-full">
-                        {s.badge}
-                      </span>
+              <DoubleBezelCard
+                key={s.href}
+                className="group h-full"
+                innerClassName="p-6 sm:p-7 bg-white h-full flex flex-col justify-between transition-all group-hover:border-brand-blue-300"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="w-12 h-12 rounded-xl bg-brand-blue-50 text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-brand-yellow-500 transition-colors flex items-center justify-center font-bold">
+                      <Icon className="w-6 h-6" />
                     </div>
-
-                    <div className="mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-brand-blue-400 block mb-0.5">
-                        {s.highlight}
-                      </span>
-                      <h2 className="font-display text-2xl uppercase tracking-tight text-brand-blue-500 group-hover:text-brand-blue-600">
-                        {s.title}
-                      </h2>
-                    </div>
-
-                    <p className="font-sans text-sm text-brand-blue-400 leading-relaxed mb-6">
-                      {s.desc}
-                    </p>
+                    <Badge variant="neutral" size="sm">
+                      {s.badge}
+                    </Badge>
                   </div>
 
-                  <div className="pt-4 border-t border-brand-blue-100 flex items-center justify-between">
-                    <Link
-                      href={s.href}
-                      className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-wider text-brand-blue-500 group-hover:text-brand-blue-600 transition-colors"
-                    >
-                      <span>Ver especificaciones y tarifas</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
+                  <div className="mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-blue-400 block mb-0.5">
+                      {s.highlight}
+                    </span>
+                    <h2 className="font-display text-2xl uppercase tracking-tight text-brand-blue-500 group-hover:text-brand-blue-600">
+                      {s.title}
+                    </h2>
                   </div>
+
+                  <p className="font-sans text-sm text-brand-blue-400 leading-relaxed mb-6">
+                    {s.desc}
+                  </p>
                 </div>
-              </div>
+
+                <div className="pt-4 border-t border-brand-blue-100 flex items-center justify-between">
+                  <Link
+                    href={s.href}
+                    className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-wider text-brand-blue-500 group-hover:text-brand-blue-600 transition-colors"
+                  >
+                    <span>Ver especificaciones y tarifas</span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </DoubleBezelCard>
             );
           })}
         </div>

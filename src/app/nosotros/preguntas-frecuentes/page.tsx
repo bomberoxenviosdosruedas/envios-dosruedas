@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { HelpCircle, Calculator, MessageCircle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -89,10 +90,7 @@ export default function PreguntasFrecuentesPage() {
 
       {/* Hero */}
       <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <div 
-          className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:24px_24px]" 
-          aria-hidden="true" 
-        />
+        <HeroProceduralBackground />
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
             <HelpCircle className="w-3.5 h-3.5 text-brand-yellow-400" />
