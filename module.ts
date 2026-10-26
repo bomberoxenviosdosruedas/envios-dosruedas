@@ -1,20 +1,16 @@
-import { module, service } from '@prisma/composer';
+import { module } from '@prisma/composer';
+import { compute } from '@prisma/composer-prisma-cloud';
 import nextjs from '@prisma/composer/nextjs';
-
-const nextjsAdapter = nextjs({
-  module: import.meta.url,
-  appDir: '.',
-});
 
 export default module('envios-dosruedas', ({ provision }) => {
   provision(
-    service({
+    compute({
       name: 'web',
-      extension: nextjsAdapter.extension,
-      type: nextjsAdapter.type,
-      inputs: {},
-      params: {},
-      build: nextjsAdapter,
+      deps: {},
+      build: nextjs({
+        module: import.meta.url,
+        appDir: '.',
+      }),
     })
   );
 });
