@@ -1,69 +1,85 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Calculator, MapPin, ShieldCheck, Zap } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="min-h-screen bg-white">
+      {/* Hero Preliminar */}
+      <section className="bg-brand-blue-500 text-white py-20 px-4">
+        <div className="container mx-auto max-w-5xl text-center">
+          <div className="inline-flex items-center gap-2 bg-brand-yellow-500 text-brand-blue-500 font-subheading uppercase text-sm md:text-base px-4 py-1.5 rounded-full font-bold mb-6">
+            <Zap className="w-4 h-4" /> Flota Propia en Mar del Plata
+          </div>
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase leading-none tracking-tight mb-6">
+            Mensajería en Moto <br />
+            <span className="text-brand-yellow-500">Rápida y Segura</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="font-sans text-brand-blue-50 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            Envíos Express en franja de 3 hs, Mercado Envíos Flex en el día y tarifas LowCost para tu negocio en Mar del Plata.
           </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/cotizar"
+              className="w-full sm:w-auto bg-brand-yellow-500 hover:bg-brand-yellow-400 active:bg-brand-yellow-600 text-brand-blue-500 font-subheading text-xl uppercase tracking-wider px-8 py-4 rounded-full font-bold shadow-accent-sm inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Calculator className="w-5 h-5" /> Cotizar Envío Online
+            </Link>
+            <Link
+              href="/cobertura"
+              className="w-full sm:w-auto bg-brand-blue-400/30 hover:bg-brand-blue-400/50 text-white border border-brand-blue-200/40 font-subheading text-xl uppercase tracking-wider px-8 py-4 rounded-full font-bold inline-flex items-center justify-center gap-2 transition-all"
+            >
+              <MapPin className="w-5 h-5" /> Ver Cobertura MdP
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Franja de Remate Amarilla */}
+      <div className="franja-vial" />
+
+      {/* Grid de Accesos Rápidos */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="double-bezel-outer">
+            <div className="double-bezel-inner">
+              <Zap className="w-8 h-8 text-brand-blue-500 mb-3" />
+              <h2 className="font-display text-2xl uppercase text-brand-blue-500 mb-2">Express 3 Horas</h2>
+              <p className="text-brand-blue-400 font-sans text-sm mb-4">
+                Despachos prioritarios puerta a puerta con corte operativo a las 15:00 hs.
+              </p>
+              <Link href="/servicios/envios-express" className="text-brand-blue-500 font-subheading uppercase text-sm font-bold inline-flex items-center gap-1 hover:underline">
+                Conocer Más <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="double-bezel-outer">
+            <div className="double-bezel-inner">
+              <ShieldCheck className="w-8 h-8 text-brand-blue-500 mb-3" />
+              <h2 className="font-display text-2xl uppercase text-brand-blue-500 mb-2">Mercado Envíos Flex</h2>
+              <p className="text-brand-blue-400 font-sans text-lg mb-4">
+                Entregas en el día garantizadas para potenciar tus ventas y reputación verde.
+              </p>
+              <Link href="/servicios/enviosflex" className="text-brand-blue-500 font-subheading uppercase text-sm font-bold inline-flex items-center gap-1 hover:underline">
+                Conocer Más <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="double-bezel-outer">
+            <div className="double-bezel-inner">
+              <Calculator className="w-8 h-8 text-brand-blue-500 mb-3" />
+              <h2 className="font-display text-2xl uppercase text-brand-blue-500 mb-2">Reparto LowCost</h2>
+              <p className="text-brand-blue-400 font-sans text-sm mb-4">
+                El precio más competitivo por zona para entregas en el día hasta las 19:00 hs.
+              </p>
+              <Link href="/servicios/envios-lowcost" className="text-brand-blue-500 font-subheading uppercase text-sm font-bold inline-flex items-center gap-1 hover:underline">
+                Conocer Más <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }
