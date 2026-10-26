@@ -1,5 +1,12 @@
 allowBuilds:
   '@prisma/engines': true
+  esbuild: true
   prisma: true
   sharp: false
   unrs-resolver: false
+  workerd: true
+permissions:
+  '@prisma/orm-postgres':
+    skills: true
+  prisma:
+    skills: true

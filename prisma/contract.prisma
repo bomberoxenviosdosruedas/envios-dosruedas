@@ -1,0 +1,60 @@
+// use prisma-8
+
+enum ServiceType {
+  LOW_COST
+  EXPRESS
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  posts     Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model PriceRange {
+  id             Int         @id @default(autoincrement())
+  serviceType    ServiceType
+  distanciaMinKm Float
+  distanciaMaxKm Float
+  precioRango    Float
+  descripcion    String
+
+  @@index([serviceType, distanciaMinKm, distanciaMaxKm], name: "idx_pricerange_service_distance")
+}
+
+model Feedback {
+  id            Int      @id @default(autoincrement())
+  page          String
+  componentPath String
+  currentText   String
+  suggestedEdit String
+  createdAt     DateTime @default(now())
+}
+
+model ImageMetadata {
+  id                  Int                   @id @default(autoincrement())
+  src                 String
+  alt                 String
+  role                String
+  contextPage         String
+  createdAt           DateTime              @default(now())
+  aiPromptSuggestions AiPromptSuggestion[]
+}
+
+model AiPromptSuggestion {
+  id              Int           @id @default(autoincrement())
+  imageId         Int
+  image           ImageMetadata @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  suggestedPrompt String
+  status          String        @default("PENDING")
+  createdAt       DateTime      @default(now())
+}
