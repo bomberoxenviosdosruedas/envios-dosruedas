@@ -35,11 +35,19 @@ export default function EmpresasCuentaCorrientePage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
-        title="Empresas y Cuenta Corriente"
+        title="Empresas y Comercios"
+        knockoutText="Cuenta Corriente PyME"
         subtitle="Agilizá la operativa diaria de tu empresa, estudio, farmacia o distribuidora. Facturación mensual o quincenal unificada, cadetes registrados con documentación al día, remitos conformados y prioridad de despacho."
         badge="Solución Corporativa B2B"
         icon={Building2}
+        variant="default"
+        tone="blue"
         whatsappMessage="Hola Envíos DosRuedas! Quisiera abrir una cuenta corriente corporativa para mi empresa."
+        summaryMetrics={[
+          { label: 'Facturación', value: 'Quincenal', desc: 'Factura C' },
+          { label: 'Prioridad', value: 'Flota Fija', desc: 'Sin demoras' },
+          { label: 'Remitos', value: 'Firmados', desc: 'Digital + Papel' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

@@ -35,10 +35,18 @@ export default function EnviosFlexPage() {
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
         title="Mercado Envíos Flex"
+        knockoutText="Métricas Verdes Aseguradas"
         subtitle="Entregá en el día a tus compradores de Mercado Libre y mantené tu reputación verde en lo más alto. Retiramos por tu depósito o local comercial a las 15:00 hs y entregamos de corrido hasta las 20:00 hs."
         badge="Mercado Libre Flex · Corte 15:00 hs"
         icon={Package}
+        variant="flex"
+        tone="blue"
         whatsappMessage="Hola Envíos DosRuedas! Vendo por Mercado Libre y quiero activar Mercado Envíos Flex con ustedes."
+        summaryMetrics={[
+          { label: 'Corte', value: '15:00 hs', desc: 'Retiro en tu local' },
+          { label: 'Entrega', value: 'Hasta 20 hs', desc: 'Same-Day' },
+          { label: 'Reputación', value: '100% Verde', desc: 'Termómetro ML' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

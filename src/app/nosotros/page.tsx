@@ -16,6 +16,7 @@ import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackgrou
 import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
 import { CTANestedPill } from '@/components/ui/CTANestedPill';
 import { Badge } from '@/components/ui/Badge';
+import { Knockout } from '@/components/ui/Knockout';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -69,26 +70,98 @@ export default function NosotrosHubPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       {/* Hero */}
-      <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <HeroProceduralBackground />
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
-            <Building className="w-3.5 h-3.5 text-brand-yellow-400" />
-            Base Central: Friuli 1972
-          </span>
+      <section
+        id="nosotros-hero"
+        aria-label="Información institucional sobre Envíos DosRuedas en Mar del Plata"
+        className="relative isolate flex min-h-[75dvh] lg:min-h-[85dvh] w-full flex-col justify-center overflow-hidden bg-brand-blue-500 text-white border-b-4 border-brand-yellow-500"
+      >
+        <HeroProceduralBackground variant="default" tone="blue" />
 
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-white mb-4 leading-none max-w-4xl mx-auto">
-            Módulo Institucional
-          </h1>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* LEFT 7 */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+              <Badge
+                variant="accent"
+                size="lg"
+                className="-rotate-1"
+                icon={<Building className="h-4 w-4" aria-hidden="true" />}
+              >
+                Base Central: Friuli 1972
+              </Badge>
 
-          <p className="font-sans text-lg sm:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Mensajería y logística urbana con raíces marplatenses. Compromiso de palabra, seriedad y atención personalizada para cada envío.
-          </p>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display uppercase tracking-[-0.03em] leading-[0.92] text-white text-balance">
+                <span className="block">Trayectoria y Base</span>
+                <Knockout>Friuli 1972</Knockout>
+              </h1>
+
+              <p className="text-base sm:text-lg font-sans text-white/90 max-w-[56ch] mx-auto lg:mx-0 leading-relaxed font-light">
+                Mensajería y logística urbana con raíces marplatenses. Compromiso de palabra, seriedad y atención personalizada para cada envío.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start pt-1">
+                <CTANestedPill
+                  href="/nosotros/sobre-nosotros"
+                  variant="primary"
+                  size="large"
+                  icon={<ArrowRight className="w-5 h-5" />}
+                  iconPosition="right"
+                >
+                  Conocer nuestra historia
+                </CTANestedPill>
+                <a
+                  href="#secciones-nosotros"
+                  className="inline-flex min-h-11 items-center gap-2 font-subheading text-sm sm:text-base uppercase tracking-wider text-white underline decoration-brand-yellow-500 decoration-2 underline-offset-4 hover:text-brand-yellow-500 transition-colors"
+                >
+                  <span>Explorar secciones</span>
+                </a>
+              </div>
+            </div>
+
+            {/* RIGHT 5 */}
+            <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center">
+              <DoubleBezelCard
+                className="w-full max-w-md shadow-2xl"
+                innerClassName="p-6 sm:p-8 space-y-4"
+              >
+                <div className="flex items-center justify-between border-b border-brand-blue-100 pb-3">
+                  <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-blue-500">
+                    Firma Marplatense
+                  </span>
+                  <span className="font-mono text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
+                    Desde 2019
+                  </span>
+                </div>
+
+                <div className="space-y-3 font-sans text-xs text-brand-blue-500">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center shrink-0">
+                      <Bike className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <strong className="block font-bold">Flota 100% Propia</strong>
+                      <span className="text-brand-blue-400">Sin intermediarios ni aplicaciones foráneas.</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <strong className="block font-bold">Responsabilidad Fiscal</strong>
+                      <span className="text-brand-blue-400">Régimen Simplificado (Monotributo) · Factura C.</span>
+                    </div>
+                  </div>
+                </div>
+              </DoubleBezelCard>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Grid de Secciones */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
+      <section id="secciones-nosotros" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {SECTIONS.map((sec) => {
             const Icon = sec.icon;

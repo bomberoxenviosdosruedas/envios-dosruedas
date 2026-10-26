@@ -35,11 +35,19 @@ export default function EnviosContraReembolsoPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
-        title="Envíos Contra Reembolso"
+        title="Envíos con"
+        knockoutText="Cobranza en Puerta"
         subtitle="Cobramos tu mercadería en efectivo al comprador al momento de entregar en su domicilio y te rendimos el dinero en 24 hs hábiles por transferencia bancaria o en mano en nuestra base de Friuli 1972."
         badge="Cobranza en Efectivo · Rendición 24 hs"
         icon={Banknote}
+        variant="default"
+        tone="blue"
         whatsappMessage="Hola Envíos DosRuedas! Quisiera coordinar un envío Contra Reembolso con cobro en efectivo."
+        summaryMetrics={[
+          { label: 'Rendición', value: '24 hs', desc: 'Transferencia o Efectivo' },
+          { label: 'Comisión', value: '$0', desc: 'Sin sorpresas' },
+          { label: 'Seguridad', value: '100%', desc: 'Remito firmado' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

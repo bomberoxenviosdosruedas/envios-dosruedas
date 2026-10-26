@@ -35,11 +35,19 @@ export default function DepositoFulfillmentPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
-        title="Depósito & Fulfillment"
+        title="Depósito y Guarda"
+        knockoutText="Stock & Fulfillment 3PL"
         subtitle="Almacenamos tu stock en nuestra base central de Friuli 1972, empacamos tus pedidos y los despachamos en la primera ronda del día. Olvidate del espacio físico, la cinta de embalar y las corridas de última hora."
         badge="Base Friuli 1972 · DropOFF -20%"
         icon={Warehouse}
+        variant="3pl"
+        tone="blue"
         whatsappMessage="Hola Envíos DosRuedas! Quisiera consultar por el servicio de Depósito y Fulfillment en Friuli 1972."
+        summaryMetrics={[
+          { label: 'DropOFF', value: '20% OFF', desc: 'En Friuli 1972' },
+          { label: 'Inventario', value: 'En Base', desc: 'Guarda segura' },
+          { label: 'Despacho', value: '1ª Ronda', desc: 'Same-Day' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

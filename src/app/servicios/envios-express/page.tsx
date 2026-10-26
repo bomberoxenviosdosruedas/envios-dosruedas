@@ -37,11 +37,19 @@ export default function EnviosExpressPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
-        title="Envíos Express en 3 Horas"
+        title="Envíos Express"
+        knockoutText="en franja de 3 hs"
         subtitle="Tu encomienda entregada en una franja horaria acotada de 3 hs, coordinada con al menos 2 hs de anticipación. Máxima prioridad para documentos urgentes, repuestos, gastronomía y paquetería crítica."
         badge="Prioridad Máxima · Corte 15:00 hs"
         icon={Zap}
+        variant="express"
+        tone="blue"
         whatsappMessage="Hola Envíos DosRuedas! Necesito coordinar un Envío Express en franja de 3 horas."
+        summaryMetrics={[
+          { label: 'Ventana', value: '3 Horas', desc: 'A elección' },
+          { label: 'Corte', value: '15:00 hs', desc: 'Lunes a Viernes' },
+          { label: 'Tarifa Base', value: '$3.700', desc: 'Hasta 3 km' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

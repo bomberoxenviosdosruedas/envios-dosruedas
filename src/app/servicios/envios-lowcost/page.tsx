@@ -37,11 +37,19 @@ export default function EnviosLowCostPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
-        title="Envíos LowCost en el Día"
+        title="Cortás el pedido"
+        knockoutText="y lo recibís hoy"
         subtitle="La tarifa más conveniente de la ciudad para envíos programados. Retiramos y entregamos en la misma jornada hasta las 19:00 hs optimizando las hojas de ruta. Ideal para emprendedores y compras no urgentes."
         badge="Máximo Ahorro · Corte 13:00 hs"
         icon={PiggyBank}
+        variant="lowcost"
+        tone="yellow"
         whatsappMessage="Hola Envíos DosRuedas! Quisiera coordinar un envío en modalidad LowCost."
+        summaryMetrics={[
+          { label: 'Corte', value: '13:00 hs', desc: 'Recepción' },
+          { label: 'Entrega', value: 'Hasta 19 hs', desc: 'Mismo día' },
+          { label: 'Tarifa Base', value: '$3.000', desc: 'Hasta 3 km' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

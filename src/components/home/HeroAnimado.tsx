@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
+import { Knockout } from '@/components/ui/Knockout';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 export default function HeroAnimado() {
   return (
@@ -44,10 +46,10 @@ export default function HeroAnimado() {
             </div>
 
             {/* Gran Titular H1 Masivo */}
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl uppercase leading-[0.92] tracking-tight text-white">
-              Logística Urbana y <br />
-              <span className="text-brand-yellow-500">Mensajería en Moto</span> <br />
-              en Mar del Plata
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl uppercase leading-[0.92] tracking-tight text-white text-balance">
+              <span className="block">Logística Urbana y</span>
+              <Knockout tone="yellow">Mensajería en Moto</Knockout>
+              <span className="block">en Mar del Plata</span>
             </h1>
 
             {/* Bajada Comercial en Outfit */}
@@ -63,20 +65,26 @@ export default function HeroAnimado() {
               </span>
             </div>
 
-            {/* Botones de Acción Principal */}
+            {/* Botones de Acción Principal con CTANestedPill */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
-              <Link
+              <CTANestedPill
                 href="/cotizar"
-                className="bg-brand-yellow-500 hover:bg-brand-yellow-400 active:bg-brand-yellow-600 text-brand-blue-500 font-subheading text-xl font-bold uppercase tracking-wider px-8 py-4 rounded-full shadow-cta-glow transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+                variant="primary"
+                size="large"
+                icon={<Calculator className="w-5 h-5" />}
+                iconPosition="left"
               >
-                <Calculator className="w-5 h-5" /> Cotizá tu Envío Ahora
-              </Link>
-              <Link
+                Cotizá tu Envío Ahora
+              </CTANestedPill>
+              <CTANestedPill
                 href="/servicios"
-                className="border-2 border-white/80 hover:bg-white hover:text-brand-blue-500 text-white font-subheading text-xl font-bold uppercase tracking-wider px-8 py-4 rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2"
+                variant="blue"
+                size="large"
+                icon={<ArrowRight className="w-5 h-5" />}
+                iconPosition="right"
               >
-                Ver Servicios <ArrowRight className="w-5 h-5" />
-              </Link>
+                Ver Servicios
+              </CTANestedPill>
             </div>
           </motion.div>
 

@@ -9,6 +9,9 @@ import {
 } from '@/components/ui/accordion';
 import { HelpCircle, Calculator, MessageCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
+import { Knockout } from '@/components/ui/Knockout';
+import { Badge } from '@/components/ui/Badge';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -89,26 +92,76 @@ export default function PreguntasFrecuentesPage() {
       />
 
       {/* Hero */}
-      <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <HeroProceduralBackground />
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
-            <HelpCircle className="w-3.5 h-3.5 text-brand-yellow-400" />
-            Centro de Ayuda y Condiciones
-          </span>
+      <section
+        id="faq-hero"
+        aria-label="Preguntas frecuentes y condiciones de servicio de Envíos DosRuedas"
+        className="relative isolate flex min-h-[75dvh] lg:min-h-[85dvh] w-full flex-col justify-center overflow-hidden bg-brand-blue-500 text-white border-b-4 border-brand-yellow-500"
+      >
+        <HeroProceduralBackground variant="default" tone="blue" />
 
-          <h1 className="font-display text-4xl sm:text-6xl uppercase tracking-tight text-white mb-4 leading-none max-w-4xl mx-auto">
-            Preguntas Frecuentes
-          </h1>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* LEFT 7 */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+              <Badge
+                variant="accent"
+                size="lg"
+                className="-rotate-1"
+                icon={<HelpCircle className="h-4 w-4" aria-hidden="true" />}
+              >
+                Centro de Ayuda y Condiciones
+              </Badge>
 
-          <p className="font-sans text-lg sm:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Condiciones de servicio, tarifas oficiales, recargos y límites de paquetería explicados con total claridad y sin letra chica.
-          </p>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display uppercase tracking-[-0.03em] leading-[0.92] text-white text-balance">
+                <span className="block">Preguntas Frecuentes</span>
+                <Knockout>sin letra chica</Knockout>
+              </h1>
+
+              <p className="text-base sm:text-lg font-sans text-white/90 max-w-[56ch] mx-auto lg:mx-0 leading-relaxed font-light">
+                Condiciones de servicio, tarifas oficiales, recargos y límites de paquetería explicados con total claridad y transparencia.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start pt-1">
+                <CTANestedPill
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  size="large"
+                  icon={<MessageCircle className="w-5 h-5" />}
+                  iconPosition="left"
+                >
+                  Consultar duda puntual
+                </CTANestedPill>
+                <a
+                  href="#preguntas"
+                  className="inline-flex min-h-11 items-center gap-2 font-subheading text-sm sm:text-base uppercase tracking-wider text-white underline decoration-brand-yellow-500 decoration-2 underline-offset-4 hover:text-brand-yellow-500 transition-colors"
+                >
+                  <span>Ver todas las preguntas</span>
+                </a>
+              </div>
+            </div>
+
+            {/* RIGHT 5 */}
+            <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center">
+              <div className="w-full max-w-md p-6 sm:p-8 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl text-left space-y-4">
+                <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-yellow-400 block border-b border-white/15 pb-2">
+                  Puntos Clave del Servicio
+                </span>
+                <div className="space-y-2.5 font-sans text-xs text-white/90">
+                  <p><strong>Bulto Estándar:</strong> Hasta 5 kg y 40 × 40 × 30 cm.</p>
+                  <p><strong>Espera de Cortesía:</strong> 10 minutos gratis en puerta.</p>
+                  <p><strong>Días de Lluvia:</strong> Recargo del 30% al 50% por asfalto mojado.</p>
+                  <p><strong>Facturación:</strong> Emitimos Factura C oficial (Monotributo).</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Contenido Acordeón */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
+      <section id="preguntas" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
         <div className="double-bezel-outer">
           <div className="double-bezel-inner p-6 sm:p-8 bg-white">
             <Accordion type="single" collapsible className="space-y-4">

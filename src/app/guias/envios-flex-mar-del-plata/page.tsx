@@ -15,6 +15,9 @@ import {
 } from 'lucide-react';
 import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
+import { Knockout } from '@/components/ui/Knockout';
+import { Badge } from '@/components/ui/Badge';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -69,21 +72,88 @@ export default function GuiaFlexPage() {
       />
 
       {/* Hero */}
-      <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <HeroProceduralBackground />
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
-            <Package className="w-3.5 h-3.5 text-brand-yellow-400" />
-            Guía Técnica Oficial E-Commerce MDQ
-          </span>
+      <section
+        id="flex-guide-hero"
+        aria-label="Guía técnica para operar Mercado Envíos Flex en Mar del Plata"
+        className="relative isolate flex min-h-[75dvh] lg:min-h-[85dvh] w-full flex-col justify-center overflow-hidden bg-brand-blue-500 text-white border-b-4 border-brand-yellow-500"
+      >
+        <HeroProceduralBackground variant="flex" tone="blue" />
 
-          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight text-white mb-4 leading-tight">
-            Guía Definitiva: Cómo Configurar Mercado Envíos Flex en Mar del Plata
-          </h1>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* LEFT 7 */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+              <Badge
+                variant="accent"
+                size="lg"
+                className="-rotate-1"
+                icon={<Package className="h-4 w-4" aria-hidden="true" />}
+              >
+                Guía Práctica para Vendedores MDQ 2026
+              </Badge>
 
-          <p className="font-sans text-base sm:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Todo lo que necesitás saber como comerciante marplatense para activar las entregas en el día, evitar demoras y proteger tu termómetro verde en Mercado Libre.
-          </p>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display uppercase tracking-[-0.03em] leading-[0.92] text-white text-balance">
+                <span className="block">Cómo Operar</span>
+                <Knockout>Mercado Envíos Flex</Knockout>
+                <span className="block">en Mar del Plata</span>
+              </h1>
+
+              <p className="text-base sm:text-lg font-sans text-white/90 max-w-[56ch] mx-auto lg:mx-0 leading-relaxed font-light">
+                Todo lo que necesitás saber para activar entregas en el mismo día, no perder ventas locales y mantener tu reputación de MercadoLíder al 100% sin complicaciones operativas.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start pt-1">
+                <CTANestedPill
+                  href="https://api.whatsapp.com/send/?phone=542236602699&text=Hola!%20Le%C3%AD%20la%20gu%C3%ADa%20Flex%20y%20quiero%20coordinar%20retiros%20para%20mi%20cuenta."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  size="large"
+                  icon={<ArrowRight className="w-5 h-5" />}
+                  iconPosition="right"
+                >
+                  Activá Flex con Nosotros
+                </CTANestedPill>
+                <CTANestedPill
+                  href="/servicios/enviosflex"
+                  variant="blue"
+                  size="large"
+                  icon={<ArrowRight className="w-5 h-5" />}
+                  iconPosition="right"
+                >
+                  Ver Servicio Flex
+                </CTANestedPill>
+              </div>
+            </div>
+
+            {/* RIGHT 5 */}
+            <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center">
+              <DoubleBezelCard
+                className="w-full max-w-md shadow-2xl"
+                innerClassName="p-6 sm:p-8 space-y-4"
+              >
+                <div className="flex items-center justify-between border-b border-brand-blue-100 pb-3">
+                  <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-blue-500">
+                    Reglas de Oro Flex
+                  </span>
+                  <span className="font-mono text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
+                    Termómetro Verde
+                  </span>
+                </div>
+
+                <div className="space-y-3 font-sans text-xs text-brand-blue-500">
+                  <div className="p-2.5 rounded-xl bg-brand-blue-50/60">
+                    <strong className="block text-brand-blue-600 font-bold mb-0.5">Corte Estricto: 15:00 hs</strong>
+                    <span>Retiramos por tu local luego de las 15 hs para repartir antes de las 20 hs.</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-brand-blue-50/60">
+                    <strong className="block text-brand-blue-600 font-bold mb-0.5">Escaneo QR Digital</strong>
+                    <span>Cada remito se conforma con geolocalización directa en la app de Mercado Libre.</span>
+                  </div>
+                </div>
+              </DoubleBezelCard>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -17,6 +17,8 @@ import ServiceCta from '@/components/servicios/ServiceCta';
 import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
 import { Badge } from '@/components/ui/Badge';
+import { Knockout } from '@/components/ui/Knockout';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -99,26 +101,102 @@ export default function ServiciosPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       {/* Hero Section */}
-      <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <HeroProceduralBackground />
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30 mb-4">
-            <ShieldCheck className="w-3.5 h-3.5 text-brand-yellow-400" />
-            Flota Propia en Mar del Plata
-          </span>
+      <section
+        id="servicios-hero"
+        aria-label="Catálogo integral de servicios de mensajería y logística urbana en Mar del Plata"
+        className="relative isolate flex min-h-[75dvh] lg:min-h-[85dvh] w-full flex-col justify-center overflow-hidden bg-brand-blue-500 text-white border-b-4 border-brand-yellow-500"
+      >
+        <HeroProceduralBackground variant="default" tone="blue" />
 
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-white mb-4 leading-none max-w-4xl mx-auto">
-            Servicios de Mensajería y Logística Urbana
-          </h1>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* LEFT 7 */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+              <Badge
+                variant="accent"
+                size="lg"
+                className="-rotate-1"
+                icon={<ShieldCheck className="h-4 w-4" aria-hidden="true" />}
+              >
+                Flota 100% Propia en MDQ
+              </Badge>
 
-          <p className="font-sans text-lg sm:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Soluciones logísticas a medida para particulares, comercios e industrias de Mar del Plata. Rapidez, seriedad y base operativa central en Friuli 1972.
-          </p>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display uppercase tracking-[-0.03em] leading-[0.92] text-white text-balance">
+                <span className="block">Catálogo Oficial</span>
+                <Knockout>Servicios 2026</Knockout>
+              </h1>
+
+              <p className="text-base sm:text-lg font-sans text-white/90 max-w-[56ch] mx-auto lg:mx-0 leading-relaxed font-light">
+                Soluciones logísticas a medida para particulares, comercios e industrias de Mar del Plata. Rapidez, seriedad y base operativa física en Friuli 1972.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start pt-1">
+                <CTANestedPill
+                  href="/cotizar"
+                  variant="primary"
+                  size="large"
+                  icon={<ShieldCheck className="w-5 h-5" />}
+                  iconPosition="left"
+                >
+                  Cotizá tu envío ahora
+                </CTANestedPill>
+                <a
+                  href="#grilla-servicios"
+                  className="inline-flex min-h-11 items-center gap-2 font-subheading text-sm sm:text-base uppercase tracking-wider text-white underline decoration-brand-yellow-500 decoration-2 underline-offset-4 hover:text-brand-yellow-500 transition-colors"
+                >
+                  <span>Ver los 7 servicios disponibles</span>
+                </a>
+              </div>
+
+              {/* Chips */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs font-mono text-white/80">
+                <span>Express en 3 hs</span>
+                <span>·</span>
+                <span>LowCost en el día</span>
+                <span>·</span>
+                <span>Mercado Envíos Flex</span>
+                <span>·</span>
+                <span>Fulfillment 3PL</span>
+              </div>
+            </div>
+
+            {/* RIGHT 5 */}
+            <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center">
+              <DoubleBezelCard
+                className="w-full max-w-md shadow-2xl"
+                innerClassName="p-6 sm:p-8 space-y-4"
+              >
+                <div className="flex items-center justify-between border-b border-brand-blue-100 pb-3">
+                  <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-blue-500">
+                    Garantías Operativas
+                  </span>
+                  <span className="font-mono text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
+                    Vigente 2026
+                  </span>
+                </div>
+
+                <div className="space-y-3 font-sans text-xs text-brand-blue-500">
+                  <div className="p-3 rounded-xl bg-brand-blue-50/60">
+                    <strong className="block text-sm font-display uppercase text-brand-blue-600 mb-0.5">
+                      Base Central en Friuli 1972
+                    </strong>
+                    <span>Depósito propio para drop-off bonificado (-20%), guarda y consolidación.</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-brand-blue-50/60">
+                    <strong className="block text-sm font-display uppercase text-brand-blue-600 mb-0.5">
+                      Repartidores Registrados
+                    </strong>
+                    <span>Cero tercerización anónima: conductores profesionales con seguro y remito.</span>
+                  </div>
+                </div>
+              </DoubleBezelCard>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Grid de Servicios */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
+      <section id="grilla-servicios" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {SERVICES.map((s) => {
             const Icon = s.icon;

@@ -34,11 +34,19 @@ export default function PlanEmprendedoresPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       <ServiceHero
-        title="Plan Emprendedores"
+        title="Plan Especial"
+        knockoutText="E-Commerce & Showrooms"
         subtitle="Diseñado a la medida de marcas de indumentaria, accesorios, cosmética, calzado y tiendas de redes sociales de Mar del Plata. Accedé a tarifas preferenciales por volumen mensual, retiros fijos y seguimiento de cada venta."
         badge="E-commerce Mar del Plata · Volumen Bonificado"
         icon={Rocket}
+        variant="default"
+        tone="blue"
         whatsappMessage="Hola Envíos DosRuedas! Tengo un emprendimiento en Mar del Plata y quiero sumarme al Plan Emprendedores."
+        summaryMetrics={[
+          { label: 'Volumen', value: 'Tarifa Plana', desc: 'Desde 15 envíos' },
+          { label: 'DropOFF', value: '20% OFF', desc: 'En Friuli 1972' },
+          { label: 'Retiro', value: 'Programado', desc: 'Por tu showroom' },
+        ]}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">

@@ -16,6 +16,9 @@ import {
 } from 'lucide-react';
 import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
+import { Knockout } from '@/components/ui/Knockout';
+import { Badge } from '@/components/ui/Badge';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
@@ -103,28 +106,94 @@ export default function SobreNosotrosPage() {
   return (
     <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
       {/* Hero */}
-      <section className="bg-brand-blue-500 text-white pt-16 pb-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-        <HeroProceduralBackground />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow-500/20 text-brand-yellow-300 text-xs font-semibold tracking-wider uppercase border border-brand-yellow-500/30">
-              <ShieldCheck className="w-3.5 h-3.5 text-brand-yellow-400" />
-              Nuestra Identidad y Trayectoria
-            </span>
+      <section
+        id="about-hero"
+        aria-label="Historia y trayectoria de Envíos DosRuedas en Mar del Plata"
+        className="relative isolate flex min-h-[75dvh] lg:min-h-[85dvh] w-full flex-col justify-center overflow-hidden bg-brand-blue-500 text-white border-b-4 border-brand-yellow-500"
+      >
+        <HeroProceduralBackground variant="default" tone="blue" />
+
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* LEFT 7 */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+              <Badge
+                variant="accent"
+                size="lg"
+                className="-rotate-1"
+                icon={<ShieldCheck className="h-4 w-4" aria-hidden="true" />}
+              >
+                Trayectoria y Flota Propia
+              </Badge>
+
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display uppercase tracking-[-0.03em] leading-[0.92] text-white text-balance">
+                <span className="block">Sobre Nosotros</span>
+                <Knockout>flota propia</Knockout>
+                <span className="block">en Mar del Plata</span>
+              </h1>
+
+              <p className="text-base sm:text-lg font-sans text-white/90 max-w-[56ch] mx-auto lg:mx-0 leading-relaxed font-light">
+                Más de 7 años transformando la última milla y la mensajería urbana en Mar del Plata con <strong>flota propia registrada, atención directa y base física en Friuli 1972</strong>. Cero tercerización ni aplicaciones anónimas.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start pt-1">
+                <CTANestedPill
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  size="large"
+                  icon={<ArrowRight className="w-5 h-5" />}
+                  iconPosition="right"
+                >
+                  Conversar con el equipo
+                </CTANestedPill>
+                <a
+                  href="#historia"
+                  className="inline-flex min-h-11 items-center gap-2 font-subheading text-sm sm:text-base uppercase tracking-wider text-white underline decoration-brand-yellow-500 decoration-2 underline-offset-4 hover:text-brand-yellow-500 transition-colors"
+                >
+                  <span>Conocer nuestra evolución</span>
+                </a>
+              </div>
+            </div>
+
+            {/* RIGHT 5 */}
+            <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center">
+              <DoubleBezelCard
+                className="w-full max-w-md shadow-2xl"
+                innerClassName="p-6 sm:p-8 space-y-4"
+              >
+                <div className="flex items-center justify-between border-b border-brand-blue-100 pb-3">
+                  <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-blue-500">
+                    Fuerza Operativa
+                  </span>
+                  <span className="font-mono text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
+                    Activos
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-center">
+                  <div className="p-3 rounded-xl bg-brand-blue-50/70 border border-brand-blue-100">
+                    <span className="font-mono text-2xl font-bold text-brand-blue-500 block">+20</span>
+                    <span className="font-subheading text-3xs uppercase tracking-wider text-brand-blue-400">Repartidores</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-brand-blue-50/70 border border-brand-blue-100">
+                    <span className="font-mono text-2xl font-bold text-brand-blue-500 block">7 Años</span>
+                    <span className="font-subheading text-3xs uppercase tracking-wider text-brand-blue-400">En la Ciudad</span>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-brand-yellow-500/15 border border-brand-yellow-500/30 text-xs text-brand-blue-500 font-sans">
+                  <strong>Base Friuli 1972:</strong> Centro de recepción, almacenamiento 3PL y punto DropOFF bonificado para comerciantes.
+                </div>
+              </DoubleBezelCard>
+            </div>
           </div>
-
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-white mb-4 leading-none max-w-4xl">
-            Sobre Envíos DosRuedas: Mensajería Real en Mar del Plata
-          </h1>
-
-          <p className="font-sans text-lg sm:text-xl text-white/90 max-w-3xl leading-relaxed font-normal">
-            Más de 7 años transformando la última milla y la mensajería urbana en Mar del Plata con <strong>flota propia, atención directa y base física en Friuli 1972</strong>. Cero tercerización ni plataformas impersonales.
-          </p>
         </div>
       </section>
 
       {/* Contenido Narrativo */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
+      <section id="historia" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
         {/* Manifiesto y Base Física */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           <div className="lg:col-span-7 space-y-6">
