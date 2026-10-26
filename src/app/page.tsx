@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import HeroAnimado from '@/components/home/HeroAnimado';
 import SegmentosHome from '@/components/home/SegmentosHome';
 import ServicesOverview from '@/components/home/ServicesOverview';
+import LogisticaHomeSection from '@/components/home/LogisticaHomeSection';
 import EmprendedoresHome from '@/components/home/EmprendedoresHome';
+import MarDeliveryHomeSection from '@/components/home/MarDeliveryHomeSection';
 import SocialProofSection from '@/components/home/SocialProofSection';
 import CtaSection from '@/components/home/CtaSection';
 
@@ -26,11 +28,16 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div id="home-page-container" className="bg-white text-brand-blue-500 overflow-x-hidden">
+    <div
+      id="home-page-container"
+      className="bg-brand-white text-brand-ink selection:bg-brand-yellow selection:text-brand-blue overflow-x-hidden"
+    >
       <HeroAnimado />
       <SegmentosHome />
       <ServicesOverview />
+      <LogisticaHomeSection />
       <EmprendedoresHome />
+      <MarDeliveryHomeSection />
       <SocialProofSection />
       <CtaSection />
     </div>
