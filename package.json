@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@prisma/composer": "^0.34.0",
+    "@prisma/composer-prisma-cloud": "^0.34.0",
     "@tailwindcss/turbopack": "^4.3.3",
     "@types/leaflet": "1.9.22",
     "@types/node": "^20.19.43",
