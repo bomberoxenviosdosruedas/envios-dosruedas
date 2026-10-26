@@ -1,78 +1,116 @@
 import React from 'react';
-import type { Metadata } from 'next';
-import { Zap } from 'lucide-react';
-import ServiceHero from '@/components/servicios/ServiceHero';
-import ServiceSpecs from '@/components/servicios/ServiceSpecs';
-import ServicePricingTable from '@/components/servicios/ServicePricingTable';
-import ServiceCta from '@/components/servicios/ServiceCta';
+import { Metadata } from 'next';
+import ExpressHero from '@/components/servicios/express/ExpressHero';
+import ExpressFeatures from '@/components/servicios/express/ExpressFeatures';
+import ExpressPricing from '@/components/servicios/express/ExpressPricing';
+import ExpressUseCases from '@/components/servicios/express/ExpressUseCases';
+import { EXPRESS_PRICE_PER_KM, EXPRESS_TIERS } from '@/lib/pricing';
+import { CONSULT_THRESHOLD_KM, EXPRESS_LEAD_TIME, EXPRESS_WINDOW, STANDARD_WEIGHT_KG } from '@/lib/promises';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
+const lastTier = EXPRESS_TIERS[EXPRESS_TIERS.length - 1];
 
 export const metadata: Metadata = {
-  title: 'Envíos Express en Mar del Plata | Franja de 3 Horas',
+  title: 'Envíos Express en Moto en MDQ',
   description:
-    'Servicio de entrega express en moto para Mar del Plata. Tu encomienda entregada en una franja garantizada de 3 hs. Corte: 15:00 hs. Tarifas oficiales 2026.',
-  alternates: { canonical: `${baseUrl}/servicios/envios-express` },
+    'Servicio prioritario en moto con franja horaria a elección y 2 hs de anticipación. Tarifas fijas por distancia real en Mar del Plata. Despachá tu envío hoy.',
+  alternates: {
+    canonical: `${baseUrl}/servicios/envios-express`,
+  },
   openGraph: {
-    title: 'Envíos Express en 3 Horas | Envíos DosRuedas',
-    description:
-      'Entregas urgentes punto a punto en Mar del Plata. Coordinación con 2 hs de anticipación y franja máxima de 3 hs.',
+    title: 'Envíos Express en Moto en MDQ | Envíos DosRuedas',
+    description: `Cadetería en moto con entrega en ${EXPRESS_WINDOW} a elección, pedido con ${EXPRESS_LEAD_TIME}. Flota propia y tarifas 2026 por distancia.`,
     url: `${baseUrl}/servicios/envios-express`,
     type: 'website',
     locale: 'es_AR',
-    images: [`${baseUrl}/og-image.jpg`],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Envíos Express en Moto en Mar del Plata | Envíos DosRuedas',
+    description: `Cadetería en moto con entrega en ${EXPRESS_WINDOW} a elección, pedido con ${EXPRESS_LEAD_TIME}. Flota propia y tarifas 2026 por distancia.`,
+    // Sin `images`: X usa og:image, que genera ./opengraph-image.tsx (public/og-image.jpg no existe).
+    creator: '@enviosdosruedas',
   },
 };
 
-const EXPRESS_PRICING_ROWS = [
-  { range: '0 a 3 km', price: '$3.700', note: 'Radio céntrico y barrios próximos' },
-  { range: '3 a 5 km', price: '$4.600', note: 'Radio urbano intermedio' },
-  { range: '5 a 7 km', price: '$6.100', note: 'Radio extendido (Puerto, Constitución, etc.)' },
-  { range: '7 a 10 km', price: '$8.200', note: 'Periferia urbana (Mogotes, Bosque, etc.)' },
-  { range: '+10 km', price: '$1.000 / km', note: 'Cálculo lineal total redondeado (hasta 20 km)' },
-  { range: '+20 km', price: 'A consultar', note: 'Rutas interurbanas (Chapadmalal, Santa Clara)' },
-];
+const jsonLdSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Mensajería en Moto y Envíos Express en Mar del Plata',
+  serviceType: 'Mensajería en moto',
+  description: `Servicio prioritario de mensajería en moto con entrega en ${EXPRESS_WINDOW} a elección en Mar del Plata. Bultos estándar de hasta ${STANDARD_WEIGHT_KG} kg.`,
+  url: `${baseUrl}/servicios/envios-express`,
+  provider: {
+    '@type': 'LocalBusiness',
+    '@id': `${baseUrl}#localbusiness`,
+    name: 'Envíos DosRuedas',
+    telephone: '+54-223-660-2699',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Friuli 1972',
+      addressLocality: 'Mar del Plata',
+      addressRegion: 'Buenos Aires',
+      postalCode: '7600',
+      addressCountry: 'AR',
+    },
+  },
+  areaServed: {
+    '@type': 'City',
+    name: 'Mar del Plata',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Tarifas Express Vigentes 2026',
+    itemListElement: [
+      ...EXPRESS_TIERS.map((tier) => ({
+        '@type': 'Offer',
+        name: `Express de ${tier.minKm} a ${tier.maxKm} km`,
+        price: String(tier.price),
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+      })),
+      {
+        '@type': 'Offer',
+        name: `Express de más de ${lastTier.maxKm} km y hasta ${CONSULT_THRESHOLD_KM} km`,
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+        description: `Kilómetros totales redondeados hacia arriba por $${EXPRESS_PRICE_PER_KM.toLocaleString('es-AR')} cada uno.`,
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: String(EXPRESS_PRICE_PER_KM),
+          priceCurrency: 'ARS',
+          unitText: 'km',
+        },
+      },
+    ],
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: baseUrl },
+    { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${baseUrl}/#servicios` },
+    { '@type': 'ListItem', position: 3, name: 'Envíos Express', item: `${baseUrl}/servicios/envios-express` },
+  ],
+};
 
 export default function EnviosExpressPage() {
   return (
-    <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
-      <ServiceHero
-        title="Envíos Express"
-        knockoutText="en franja de 3 hs"
-        subtitle="Tu encomienda entregada en una franja horaria acotada de 3 hs, coordinada con al menos 2 hs de anticipación. Máxima prioridad para documentos urgentes, repuestos, gastronomía y paquetería crítica."
-        badge="Prioridad Máxima · Corte 15:00 hs"
-        icon={Zap}
-        variant="express"
-        tone="blue"
-        whatsappMessage="Hola Envíos DosRuedas! Necesito coordinar un Envío Express en franja de 3 horas."
-        summaryMetrics={[
-          { label: 'Ventana', value: '3 Horas', desc: 'A elección' },
-          { label: 'Corte', value: '15:00 hs', desc: 'Lunes a Viernes' },
-          { label: 'Tarifa Base', value: '$3.700', desc: 'Hasta 3 km' },
-        ]}
+    <main className="min-h-dvh bg-white text-brand-blue-500 relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
       />
-
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
-        <ServiceSpecs
-          corte="15:00 hs (Lunes a Viernes) · 13:00 hs (Sábados)"
-          entrega="Franja acotada de 3 horas desde la confirmación"
-          capacidad="Hasta 5 kg y 40 × 40 × 30 cm (bulto extra desde $1.800)"
-          vehiculo="Moto exclusiva con caja térmica/estanca"
-          cobertura="Todo el ejido urbano de Mar del Plata y accesos periféricos"
-        />
-
-        <ServicePricingTable
-          title="Tarifas Oficiales Envíos Express (2026)"
-          rows={EXPRESS_PRICING_ROWS}
-          extraNote="* Los viajes express requieren coordinación con al menos 2 horas de anticipación previa. En días de lluvia aplica recargo del 30% al 50%. Espera en puerta: 10 min sin cargo, luego $2.200 cada 10 min adicionales. No emitimos Factura A."
-        />
-
-        <ServiceCta
-          title="¿Tenés un envío urgente en Mar del Plata?"
-          subtitle="Escribinos ahora por WhatsApp o utilizá nuestro cotizador vial para conocer el valor exacto de puerta a puerta."
-          whatsappMessage="Hola! Tengo un envío urgente para retirar y entregar hoy en Mar del Plata. ¿Tienen cadete disponible?"
-        />
-      </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <ExpressHero />
+      <ExpressFeatures />
+      <ExpressPricing />
+      <ExpressUseCases />
     </main>
   );
 }

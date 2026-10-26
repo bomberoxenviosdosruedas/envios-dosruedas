@@ -1,35 +1,50 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface FloatTiltCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface FloatTiltCardProps {
   children: React.ReactNode;
   className?: string;
   perspective?: number;
   disabled?: boolean;
 }
 
+/**
+ * FloatTiltCard Component
+ * Interactive 3D hero cards utilizing CSS perspective and multi-layer Z-translations.
+ * Follows DESIGN.md specifications:
+ * - Perspective 1000px on wrapper
+ * - transform-style: preserve-3d
+ * - Mousemove -> rotateX(±8deg) rotateY(±8deg)
+ * - Hover tilt lift -> translateY(-6px) rotateX(4deg) rotateY(-2deg) + shadow-antigravity-deep
+ * - Disables 3D tilt when prefers-reduced-motion is active
+ */
 export const FloatTiltCard: React.FC<FloatTiltCardProps> = ({
   children,
   className,
   perspective = 1000,
   disabled = false,
-  ...props
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [reducedMotion, setReducedMotion] = useState<boolean>(false);
+  const [reducedMotion, setReducedMotion] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      setReducedMotion(mediaQuery.matches);
-      const handleChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setReducedMotion(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,13 +60,13 @@ export const FloatTiltCard: React.FC<FloatTiltCardProps> = ({
     const xPct = (mouseX / width - 0.5) * 2;
     const yPct = (mouseY / height - 0.5) * 2;
 
-    const rotateX = (yPct * -5).toFixed(2);
-    const rotateY = (xPct * 5).toFixed(2);
+    const rotateX = (yPct * -6).toFixed(2);
+    const rotateY = (xPct * 6).toFixed(2);
 
     if (!rafRef.current) {
       rafRef.current = requestAnimationFrame(() => {
         if (cardRef.current) {
-          cardRef.current.style.transform = `translateY(-4px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          cardRef.current.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         }
         rafRef.current = 0;
       });
@@ -79,7 +94,6 @@ export const FloatTiltCard: React.FC<FloatTiltCardProps> = ({
     <div
       className="float-tilt-perspective w-full"
       style={{ perspective: `${perspective}px` }}
-      {...props}
     >
       <div
         ref={cardRef}
@@ -94,7 +108,7 @@ export const FloatTiltCard: React.FC<FloatTiltCardProps> = ({
         }}
         className={cn(
           'relative transition-[box-shadow] duration-200 ease-out',
-          isHovered && 'shadow-xl',
+          isHovered && 'shadow-antigravity-deep',
           className
         )}
       >
@@ -103,3 +117,5 @@ export const FloatTiltCard: React.FC<FloatTiltCardProps> = ({
     </div>
   );
 };
+
+export default FloatTiltCard;

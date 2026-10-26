@@ -1,33 +1,99 @@
 import React from 'react';
-import type { Metadata } from 'next';
-import CoberturaHero from '@/components/cobertura/CoberturaHero';
-import CoberturaMapaWrapper from '@/components/cobertura/CoberturaMapaWrapper';
-import CoberturaZonasGrid from '@/components/cobertura/CoberturaZonasGrid';
-import CoberturaPeriferiaInfo from '@/components/cobertura/CoberturaPeriferiaInfo';
-import CoberturaCta from '@/components/cobertura/CoberturaCta';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { MapPin, Zap, Clock, ShieldCheck, ArrowRight, CheckCircle2, Navigation, Compass } from 'lucide-react';
+import CTANestedPill from '@/components/ui/CTANestedPill';
+import CoberturaExplorer from '@/components/cobertura/CoberturaExplorer';
+import LogisticaNetworkCanvas from '@/components/home/LogisticaNetworkCanvas';
+import {
+  EXPRESS_PRICE_PER_KM,
+  EXPRESS_TIERS,
+  LOW_COST_PRICE_PER_KM,
+  LOW_COST_TIERS,
+} from '@/lib/pricing';
+import { CONSULT_THRESHOLD_KM } from '@/lib/promises';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
+const formatArs = (value: number) => `$${value.toLocaleString('es-AR')}`;
+
+/**
+ * Nombres de barrios por zona. Contenido editorial: NO contiene precios.
+ * Los importes salen de `pricing.ts` (fuente única) — nunca escribirlos a mano,
+ * o quedan desincronizados de `PriceRange` en BD.
+ */
+const ZONE_BARRIOS: readonly string[] = [
+  'Macrocentro, Centro, Güemes, Chauvín, San Juan, La Perla',
+  'Playa Grande, Los Troncos, Puerto, Parque Luro, Pompeya',
+  'Punta Mogotes, Caisamar, Constitución, Colinas, Las Avenidas',
+  'Faro, Alfar, Bosque Peralta Ramos, Parque Camet, Libertad',
+  'Acantilados, San Patricio, Estación Camet, Camet Norte',
+];
+
+/**
+ * Filas de la tabla de radios. Los tramos fijos se toman de los `*_TIERS`;
+ * la última fila es el tramo por km, que aplica a partir del último tier
+ * y hasta `CONSULT_THRESHOLD_KM`.
+ */
+const ZONE_ROWS = ZONE_BARRIOS.map((barrios, i) => {
+  const express = EXPRESS_TIERS[i];
+  const lowCost = LOW_COST_TIERS[i];
+
+  if (express && lowCost) {
+    return {
+      zona: `Z${i + 1}`,
+      km: `${express.minKm} a ${express.maxKm} km`,
+      barrios,
+      express: formatArs(express.price),
+      lowCost: formatArs(lowCost.price),
+      isFormula: false,
+    };
+  }
+
+  const lastTier = EXPRESS_TIERS[EXPRESS_TIERS.length - 1];
+  return {
+    zona: `Z${i + 1}`,
+    km: `+${lastTier.maxKm} km (hasta ${CONSULT_THRESHOLD_KM} km)`,
+    barrios,
+    express: `${formatArs(EXPRESS_PRICE_PER_KM)}/km`,
+    lowCost: `${formatArs(LOW_COST_PRICE_PER_KM)}/km`,
+    isFormula: true,
+  };
+});
+
 export const metadata: Metadata = {
-  title: 'Cobertura de Envíos en Mar del Plata | 5 Radios Zonales',
+  title: 'Cobertura de Envíos en Mar del Plata',
   description:
-    'Conocé las 5 zonas de reparto y cobertura de Envíos DosRuedas en Mar del Plata: Centro, Puerto, Norte, Oeste y localidades periféricas (Batán, Sierra de los Padres, Chapadmalal). Base física en Friuli 1972.',
-  alternates: { canonical: `${baseUrl}/cobertura` },
+    'Zonas de cobertura de mensajería y paquetería en Mar del Plata. Desde Friuli 1972 a Centro, Güemes, Puerto, Mogotes y Constitución. Cotizá en el día.',
+  alternates: {
+    canonical: `${baseUrl}/cobertura`,
+  },
   openGraph: {
     title: 'Cobertura de Envíos en Mar del Plata | Envíos DosRuedas',
     description:
-      'Llegamos a toda la ciudad con flota de motos propia. Mapa interactivo de los 5 radios zonales y base operativa en Friuli 1972.',
+      'Mapa y radios de cobertura para entregas Express y LowCost en todo Mar del Plata.',
     url: `${baseUrl}/cobertura`,
     type: 'website',
     locale: 'es_AR',
     images: [`${baseUrl}/og-image.jpg`],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cobertura de Envíos en Mar del Plata | Envíos DosRuedas',
+    description: 'Mapa y radios de cobertura para entregas Express y LowCost en todo Mar del Plata.',
+    images: [`${baseUrl}/og-image.jpg`],
+    creator: '@enviosdosruedas',
   },
 };
 
 const jsonLdSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'Envíos DosRuedas - Cobertura Logística',
+  '@id': `${baseUrl}#localbusiness`,
+  name: 'Envíos DosRuedas - Cobertura Mar del Plata',
+  description:
+    'Mensajería, paquetería urbana y distribución e-commerce en todo Mar del Plata, desde la base de Friuli 1972.',
+  url: `${baseUrl}/cobertura`,
   telephone: '+54-223-660-2699',
   address: {
     '@type': 'PostalAddress',
@@ -39,43 +105,215 @@ const jsonLdSchema = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: -38.0055,
-    longitude: -57.5426,
+    latitude: -38.0175,
+    longitude: -57.5683,
   },
   areaServed: [
-    { '@type': 'AdministrativeArea', name: 'Centro y Macrocentro Mar del Plata' },
-    { '@type': 'AdministrativeArea', name: 'Puerto y Playa Grande' },
-    { '@type': 'AdministrativeArea', name: 'Parque Luro y Constitución' },
-    { '@type': 'AdministrativeArea', name: 'Zona Oeste y Regional' },
-    { '@type': 'AdministrativeArea', name: 'Batán' },
-    { '@type': 'AdministrativeArea', name: 'Sierra de los Padres' },
-    { '@type': 'AdministrativeArea', name: 'Chapadmalal' },
-    { '@type': 'AdministrativeArea', name: 'Santa Clara del Mar' },
+    { '@type': 'City', name: 'Mar del Plata' },
+    { '@type': 'Place', name: 'Chauvín' },
+    { '@type': 'Place', name: 'Centro Mar del Plata' },
+    { '@type': 'Place', name: 'Güemes' },
+    { '@type': 'Place', name: 'Playa Grande' },
+    { '@type': 'Place', name: 'Puerto Mar del Plata' },
+    { '@type': 'Place', name: 'Punta Mogotes' },
+    { '@type': 'Place', name: 'Constitución' },
+  ],
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: baseUrl },
+    { '@type': 'ListItem', position: 2, name: 'Cobertura', item: `${baseUrl}/cobertura` },
   ],
 };
 
 export default function CoberturaPage() {
   return (
-    <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
+    <main className="min-h-dvh bg-white text-brand-blue-500">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-      <CoberturaHero />
+      {/* Hero Section */}
+      <section className="relative bg-brand-blue-500 text-white pt-24 pb-16 lg:pt-32 lg:pb-20 overflow-hidden border-b border-brand-blue-500">
+        <div className="absolute inset-0 opacity-25 pointer-events-none">
+          <LogisticaNetworkCanvas />
+        </div>
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#FFEC01_1px,transparent_1px)] bg-size-[16px_16px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-yellow-500 text-brand-blue-500 font-subheading text-xs uppercase tracking-wider mb-4">
+              <Compass className="w-3.5 h-3.5" />
+              <span>TODO MAR DEL PLATA · VIGENCIA 2026</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display uppercase tracking-tight text-white leading-none">
+              LLEGAMOS A <span className="text-brand-yellow-500">TODO MAR DEL PLATA</span>
+            </h1>
+            <p className="mt-4 text-base sm:text-lg text-brand-blue-100/90 font-sans leading-relaxed">
+              Operamos con base logística central en <strong>Friuli 1972</strong>. Llegamos a todos
+              los barrios de Mar del Plata. Más allá de los 10 km de ruta, la tarifa se calcula por
+              kilómetro: escribinos y te la confirmamos.
+            </p>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-14">
-        {/* Mapa Interactivo */}
-        <CoberturaMapaWrapper />
+            <div className="mt-8 flex flex-wrap gap-4">
+              <CTANestedPill href="/cotizar" variant="primary" size="large">
+                Cotizá tu envío
+              </CTANestedPill>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Fichas de los 5 Radios Zonales */}
-        <CoberturaZonasGrid />
+      {/* Radios Breakdown Table - Double Bezel */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <h2 className="font-display text-3xl sm:text-4xl uppercase text-brand-blue-500">
+            ESQUEMA DE RADIOS Y TARIFAS 2026
+          </h2>
+          <p className="font-sans text-sm sm:text-base text-brand-blue-500 mt-2">
+            Tarifas transparentes calculadas según la distancia real en kilómetros desde el punto de retiro al de entrega.
+          </p>
+        </div>
 
-        {/* Especificaciones Periferia */}
-        <CoberturaPeriferiaInfo />
+        <div className="bg-brand-blue-50/80 border border-brand-blue-100 p-2 rounded-2xl shadow-sm">
+          <div className="bg-white rounded-xl border border-brand-blue-100/50 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left">
+                <caption className="sr-only">
+                  Tarifas Express y LowCost por zona de cobertura en Mar del Plata, 2026.
+                </caption>
+                <thead>
+                  <tr className="border-b border-brand-blue-100">
+                    <th
+                      scope="col"
+                      className="px-4 py-3 font-subheading text-sm uppercase tracking-[0.08em] text-brand-blue-500"
+                    >
+                      Zona
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-3 font-subheading text-sm uppercase tracking-[0.08em] text-brand-blue-500"
+                    >
+                      Distancia
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-3 font-subheading text-sm uppercase tracking-[0.08em] text-brand-blue-500"
+                    >
+                      Barrios incluidos
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-right font-subheading text-sm uppercase tracking-[0.08em] text-brand-blue-500"
+                    >
+                      Express
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-right font-subheading text-sm uppercase tracking-[0.08em] text-brand-blue-500"
+                    >
+                      LowCost
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ZONE_ROWS.map((row) => (
+                    <tr
+                      key={row.zona}
+                      className="border-b border-brand-blue-100 align-top last:border-b-0"
+                    >
+                      <th scope="row" className="px-4 py-3.5">
+                        <span className="rounded bg-brand-blue-500 px-2 py-0.5 font-mono text-sm text-white tabular-nums">
+                          {row.zona}
+                        </span>
+                      </th>
+                      <td className="whitespace-nowrap px-4 py-3.5 font-mono text-xs font-medium text-brand-blue-500 tabular-nums">
+                        {row.km}
+                      </td>
+                      <td className="px-4 py-3.5 font-sans text-xs leading-relaxed text-brand-blue-500">
+                        {row.barrios}
+                        {row.isFormula && (
+                          <span className="mt-1 block font-sans text-2xs italic text-brand-blue-500">
+                            * Aplica Math.ceil(km) × valor por km
+                          </span>
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-sm font-bold text-brand-blue-500 tabular-nums">
+                        {row.express}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-sm font-bold text-brand-blue-500 tabular-nums">
+                        {row.lowCost}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* CTA Cotizador */}
-        <CoberturaCta />
+      {/* Interactive Neighborhood Explorer */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-6">
+          <h2 className="font-display text-2xl sm:text-3xl uppercase text-brand-blue-500">
+            BUSCADOR DE BARRIOS Y ZONAS
+          </h2>
+          <p className="font-sans text-sm text-brand-blue-500 mt-1">
+            Encontrá tu barrio en Mar del Plata y visualizá el radio y la tarifa estimada de forma inmediata.
+          </p>
+        </div>
+        <CoberturaExplorer />
+      </section>
+
+      {/* Operating Base and Guarantees */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="bg-brand-blue-50/80 border border-brand-blue-100 p-3 rounded-3xl">
+          <div className="bg-white p-6 sm:p-10 rounded-2xl border border-brand-blue-100/50 shadow-sm grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-brand-yellow-500 text-brand-blue-500 flex items-center justify-center font-bold">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <h3 className="font-subheading text-xl uppercase text-brand-blue-500">
+                BASE OPERATIVA CENTRAL
+              </h3>
+              <p className="font-sans text-sm text-brand-blue-500 leading-relaxed">
+                Nuestra base física está ubicada en <strong>Friuli 1972</strong>. Esta posición estratégica en Mar del Plata nos permite despachar a cualquier punto de la ciudad en minutos.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-brand-blue-500 text-brand-yellow-500 flex items-center justify-center font-bold">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="font-subheading text-xl uppercase text-brand-blue-500">
+                SERVICIO EXPRESS (FRANJA DE 3 HS)
+              </h3>
+              <p className="font-sans text-sm text-brand-blue-500 leading-relaxed">
+                Prioridad operativa directa con franja horaria de entrega a elección (ej. 10 a 13 hs). Solicitá antes de las 15:00 hs con 2 horas de anticipación.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-brand-blue-50 text-brand-blue-500 border border-brand-blue-200 flex items-center justify-center font-bold">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="font-subheading text-xl uppercase text-brand-blue-500">
+                REPARTO LOWCOST EN EL DÍA
+              </h3>
+              <p className="font-sans text-sm text-brand-blue-500 leading-relaxed">
+                Entregas en el transcurso de la jornada antes de las 19:00 hs para compras online y comercios. Solicitá antes de las 13:00 hs con la tarifa más conveniente.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

@@ -1,255 +1,568 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  Zap,
-  PiggyBank,
-  Package,
-  Warehouse,
-  Building2,
-  Banknote,
-  Rocket,
-  ShieldCheck,
-  CheckCircle2,
-} from 'lucide-react';
-import ServiceCta from '@/components/servicios/ServiceCta';
-import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
-import { DoubleBezelCard } from '@/components/ui/DoubleBezelCard';
-import { Badge } from '@/components/ui/Badge';
-import { Knockout } from '@/components/ui/Knockout';
-import { CTANestedPill } from '@/components/ui/CTANestedPill';
+import { Zap, Truck, Package, Building2, Clock, ShieldCheck, CreditCard, MessageSquare, Store, Shield, RotateCcw } from 'lucide-react';
+import CTANestedPill from '@/components/ui/CTANestedPill';
+import { SAME_DAY_FIXED_PRICE, ECOMMERCE_24HS_PRICE } from '@/lib/promises';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
+const SAME_DAY_PRICE = `$${SAME_DAY_FIXED_PRICE.toLocaleString('es-AR')}`;
+const ECOMMERCE_24HS_PRICE_DISPLAY = `$${ECOMMERCE_24HS_PRICE.toLocaleString('es-AR')}`;
+
 export const metadata: Metadata = {
-  title: 'Servicios de Mensajería y Logística Urbana en Mar del Plata',
+  title: 'Servicios de Mensajería y Envíos',
   description:
-    'Conocé la cartera integral de envíos en moto en Mar del Plata: Express en franja de 3 hs, LowCost en el día, Mercado Envíos Flex y soluciones corporativas con flota propia.',
-  alternates: { canonical: `${baseUrl}/servicios` },
+    'Servicios de logística y mensajería en moto en Mar del Plata: Express, LowCost, Flex, Cuenta Corriente y E-commerce con stock en depósito y flota propia.',
+  alternates: {
+    canonical: `${baseUrl}/servicios`,
+  },
   openGraph: {
-    title: 'Servicios de Mensajería y Logística Urbana | Envíos DosRuedas',
+    title: 'Servicios de Mensajería y Envíos | Envíos DosRuedas',
     description:
-      'Soluciones logísticas integrales en Mar del Plata: Envíos Express, LowCost, Flex, Depósito y Cuentas Corrientes.',
+      'Mensajería Express, paquetería LowCost, MercadoLibre Flex, Cuenta Corriente y logística e-commerce en Mar del Plata.',
     url: `${baseUrl}/servicios`,
     type: 'website',
     locale: 'es_AR',
     images: [`${baseUrl}/og-image.jpg`],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Servicios | Envíos DosRuedas',
+    description: 'Envíos Express, LowCost, Flex, Cuenta Corriente y E-commerce 24hs/Same-Day en Mar del Plata. Tarifas 2026 publicadas.',
+    images: [`${baseUrl}/og-image.jpg`],
+    creator: '@enviosdosruedas',
+  },
 };
 
-const SERVICES = [
+const jsonLdSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Servicios de Logística y Mensajería Envíos DosRuedas',
+  description: 'Envíos Express, LowCost, Mercado Envíos Flex, Cuenta Corriente Flexible, E-commerce 24hs y Same-Day con stock en depósito. Flota propia, base en Friuli 1972.',
+  url: `${baseUrl}/servicios`,
+  provider: {
+    '@type': 'LocalBusiness',
+    '@id': `${baseUrl}#localbusiness`,
+    name: 'Envíos DosRuedas',
+    telephone: '+54-223-660-2699',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Friuli 1972',
+      addressLocality: 'Mar del Plata',
+      addressRegion: 'Buenos Aires',
+      postalCode: '7600',
+      addressCountry: 'AR',
+    },
+  },
+  areaServed: {
+    '@type': 'City',
+    name: 'Mar del Plata',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Catálogo de Servicios 2026',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Envíos Express',
+          description: 'Entregas prioritarias en franja horaria de 3 hs a elección en Mar del Plata.',
+          url: `${baseUrl}/servicios/envios-express`,
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Envíos LowCost',
+          description: 'Envíos económicos con entrega garantizada en el día para PyMEs.',
+          url: `${baseUrl}/servicios/envios-lowcost`,
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Envíos Flex (MercadoLibre)',
+          description: 'Servicio adaptado a los estándares de Mercado Envíos Flex. Same-Day delivery.',
+          url: `${baseUrl}/servicios/enviosflex`,
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Cuenta Corriente Flexible',
+          description: 'Para emprendedores y comercios sin volumen fijo: tarifas LowCost, franjas de 3 hs y pagos agrupados semanales, quincenales o mensuales.',
+          url: `${baseUrl}/servicios/empresas-cuenta-corriente`,
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'E-Commerce 24hs (Next Day)',
+          description: 'Se retira hoy y se entrega al día hábil siguiente. Recolección gratis desde 10 envíos.',
+          url: `${baseUrl}/servicios/deposito-fulfillment`,
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'E-Commerce Same-Day (con stock en depósito)',
+          description: 'Stock en nuestro depósito de Friuli 1972: las ventas hasta las 15:00 hs se entregan en el día, con tarifa fija a toda la ciudad.',
+          url: `${baseUrl}/servicios/deposito-fulfillment`,
+        },
+      },
+    ],
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: baseUrl },
+    { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${baseUrl}/servicios` },
+  ],
+};
+
+const services = [
   {
-    href: '/servicios/envios-express',
+    id: 'envios-express',
+    label: 'ENVÍOS EXPRESS',
+    title: 'Franja Horaria a Elección',
+    description: 'Mensajería en moto con franja horaria de 3 horas a elección. Ideal para trámites urgentes, repuestos, documentos y gestiones que no pueden esperar.',
     icon: Zap,
-    title: 'Envíos Express',
-    desc: 'Tu encomienda entregada en una franja horaria acotada de 3 hs, coordinada con al menos 2 hs de anticipación. Corte: 15:00 hs.',
-    badge: 'Desde $3.700',
-    highlight: 'Franja de 3 hs',
+    href: '/servicios/envios-express',
+    cta: 'Ver detalle y tarifas',
+    price: 'Desde $3.700',
+    priceNote: '/ envío base',
+    stats: {
+      entrega: 'Franja 3 hs',
+      corte: '15:00 hs',
+      tarifa: 'Desde $3.700',
+    },
+    features: [
+      'Franja de 3 hs (ej. 10 a 13 hs)',
+      'Corte 15:00 hs con 2h anticipación',
+      'Hasta 5 kg / 40 x 40 cm',
+      'Ruteo directo sin escalas',
+      'Confirmación al instante por WhatsApp',
+    ],
+    bgColor: 'bg-brand-blue-500',
+    borderColor: 'border-brand-blue-400',
+    highlightColor: 'text-brand-yellow-500',
+    badge: 'PRIORIDAD 1',
+    color: 'text-white',
   },
   {
+    id: 'envios-lowcost',
+    label: 'ENVÍOS LOWCOST',
+    title: 'Máxima Rentabilidad en el Día',
+    description: 'Reparto económico programado en el día, sin elección de horario. Pedidos antes de 13:00 hs se entregan antes de 19:00 hs, para e-commerce y comercio local.',
+    icon: Truck,
     href: '/servicios/envios-lowcost',
-    icon: PiggyBank,
-    title: 'Envíos LowCost',
-    desc: 'La tarifa más conveniente de la ciudad para envíos programados. Retiramos y entregamos en la misma jornada hasta las 19:00 hs. Corte: 13:00 hs.',
-    badge: 'Desde $3.000',
-    highlight: 'Ahorro programado',
+    cta: 'Ver detalle y tarifas',
+    price: 'Desde $3.000',
+    priceNote: '/ envío base',
+    stats: {
+      entrega: 'En el día',
+      corte: '13:00 hs',
+      tarifa: 'Desde $3.000',
+    },
+    features: [
+      'Entrega antes de 19:00 hs',
+      'Corte 13:00 hs mismo día',
+      'Sin elección de franja horaria',
+      'Hasta 5 kg / 40 x 40 cm',
+      'Ideal para envíos esporádicos',
+    ],
+    bgColor: 'bg-brand-blue-500',
+    borderColor: 'border-brand-blue-400',
+    highlightColor: 'text-brand-yellow-500',
+    badge: 'MÁS ECONÓMICO',
+    color: 'text-white',
   },
   {
-    href: '/servicios/enviosflex',
+    id: 'enviosflex',
+    label: 'MERCADO ENVÍOS FLEX',
+    title: 'Same-Day para MercadoLíderes',
+    description: 'Logística adaptada a estándares Flex. Corte 15:00 hs, entregas antes de 20:00 hs, múltiples retiros diarios. Protegé tu reputación y calificaciones.',
     icon: Package,
-    title: 'Mercado Envíos Flex',
-    desc: 'Entregá en el día a tus compradores de Mercado Libre y mantené tu reputación verde. Retiro hasta las 15:00 hs y entrega hasta las 20:00 hs.',
-    badge: 'Desde $4.500',
-    highlight: 'Mercado Libre Oficial',
+    href: '/servicios/enviosflex',
+    cta: 'Ver planes Flex',
+    price: 'Desde $3.000',
+    priceNote: '/ envío base',
+    stats: {
+      entrega: 'Antes 20:00 hs',
+      corte: '15:00 hs',
+      tarifa: 'Desde $3.000',
+    },
+    features: [
+      '100% entregas Same-Day < 20:00 hs',
+      'Sin mínimos: retiramos desde 1 paquete',
+      'Múltiples retiros diarios',
+      'Segunda visita bonificada',
+      'Niveles Pro/Elite con tarifas planas',
+    ],
+    bgColor: 'bg-brand-blue-500',
+    borderColor: 'border-brand-blue-400',
+    highlightColor: 'text-brand-yellow-500',
+    badge: 'MERCADOLIBRE',
+    color: 'text-white',
   },
   {
-    href: '/servicios/deposito-fulfillment',
-    icon: Warehouse,
-    title: 'Depósito & Fulfillment',
-    desc: 'Almacenamiento de stock en nuestra base central de Friuli 1972, empaque de pedidos y despacho en primera ronda. DropOFF con 20% bonificado.',
-    badge: 'Base Friuli 1972',
-    highlight: 'DropOFF -20%',
-  },
-  {
-    href: '/servicios/empresas-cuenta-corriente',
+    id: 'cuenta-corriente-flexible',
+    label: 'CUENTA CORRIENTE FLEXIBLE',
+    title: 'Tu Equipo de Entregas sin Volumen Fijo',
+    description: 'Para emprendedores y comercios cuya cantidad de pedidos cambia cada día. Tarifas LowCost con franjas de 3 hs como en Express, y pagos agrupados.',
     icon: Building2,
-    title: 'Empresas y Cuenta Corriente',
-    desc: 'Facturación mensual unificada, cadetería fija bajo demanda, remitos conformados y atención prioritaria para firmas comerciales de Mar del Plata.',
-    badge: 'Solución B2B',
-    highlight: 'Crédito Quincenal/Mensual',
+    href: '/servicios/empresas-cuenta-corriente',
+    cta: 'Ver condiciones',
+    price: 'Tarifas LowCost',
+    priceNote: '',
+    stats: {
+      entrega: 'Franja 3 hs',
+      corte: '15:00 hs',
+      tarifa: 'Tarifa LowCost',
+    },
+    features: [
+      'Sin mínimo de envíos',
+      'Franja de 3 hs, corte 15:00 hs',
+      'Paga quien envía o quien recibe',
+      'Pagos semanales, quincenales o mensuales',
+      'Contrareembolso sin comisión',
+    ],
+    bgColor: 'bg-brand-blue-500',
+    borderColor: 'border-brand-blue-400',
+    highlightColor: 'text-brand-yellow-500',
+    badge: 'EMPRESAS',
+    color: 'text-white',
   },
   {
-    href: '/servicios/envios-contrareembolso',
-    icon: Banknote,
-    title: 'Contra Reembolso',
-    desc: 'Cobro de la mercadería en efectivo al comprador al momento de entregar y transferencia bancaria o liquidación al comerciante en 24 hs hábiles.',
-    badge: 'Cobranza Segura',
-    highlight: 'Rendición en 24 hs',
+    id: 'ecommerce-24hs',
+    label: 'E-COMMERCE 24HS',
+    title: 'Se Retira Hoy, Se Entrega Mañana',
+    description: 'Retiramos tus envíos hoy y los entregamos el día hábil siguiente en todo Mar del Plata. La recolección es gratis desde 10 envíos.',
+    icon: RotateCcw,
+    href: '/servicios/deposito-fulfillment',
+    cta: 'Ver planes 24hs',
+    price: ECOMMERCE_24HS_PRICE_DISPLAY,
+    priceNote: 'por envío',
+    stats: {
+      entrega: 'Día hábil sig.',
+      corte: 'En el día',
+      tarifa: ECOMMERCE_24HS_PRICE_DISPLAY,
+    },
+    features: [
+      'Entrega al día hábil siguiente',
+      'Recolección gratis desde 10 envíos',
+      'DropOFF en Friuli 1972: -20%',
+      'Hasta 5 kg / 40 x 40 cm',
+      'Contrareembolso sin comisión',
+    ],
+    bgColor: 'bg-brand-blue-500',
+    borderColor: 'border-brand-blue-400',
+    highlightColor: 'text-brand-yellow-500',
+    badge: 'E-COMMERCE 24HS',
+    color: 'text-white',
   },
   {
-    href: '/servicios/plan-emprendedores',
-    icon: Rocket,
-    title: 'Plan Emprendedores',
-    desc: 'Tarifas preferenciales por volumen mensual para tiendas online de redes sociales y emprendimientos locales en crecimiento.',
-    badge: 'E-commerce MDQ',
-    highlight: 'Tarifas por Volumen',
+    id: 'ecommerce-sameday',
+    label: 'E-COMMERCE SAME-DAY',
+    title: 'Entrega en el Día · Stock en Friuli 1972',
+    description: 'Dejás stock en nuestro depósito y nos ocupamos del picking, el empaque y la entrega. Las ventas hasta las 15:00 hs se entregan en el día.',
+    icon: Store,
+    href: '/servicios/deposito-fulfillment',
+    cta: 'Ver planes Same-Day',
+    price: SAME_DAY_PRICE,
+    priceNote: 'fijo a toda la ciudad',
+    stats: {
+      entrega: 'Antes 20:00 hs',
+      corte: '15:00 hs',
+      tarifa: SAME_DAY_PRICE,
+    },
+    features: [
+      'Stock en Friuli 1972 con picking QR',
+      'Corte 15:00 hs, entrega antes de 20:00 hs',
+      'Rango horario a coordinar',
+      'Tarifa fija a toda la ciudad',
+      'Productos chicos y medianos',
+    ],
+    bgColor: 'bg-brand-blue-500',
+    borderColor: 'border-brand-blue-400',
+    highlightColor: 'text-brand-yellow-500',
+    badge: 'E-COMMERCE SAME-DAY',
+    color: 'text-white',
   },
+];
+
+const comparisonTable = [
+  { feature: 'Tiempo de entrega', express: 'Franja de 3 hs', lowcost: 'Antes de 19:00 hs', flex: 'Antes de 20:00 hs', cuentaCorriente: 'Franja de 3 hs', ecom24: 'Día hábil siguiente', ecomSameDay: 'Antes de 20:00 hs' },
+  { feature: 'Horario de corte', express: '15:00 hs (2h ant.)', lowcost: '13:00 hs', flex: '15:00 hs', cuentaCorriente: '15:00 hs (2h ant.)', ecom24: 'Retiro en el día', ecomSameDay: '15:00 hs' },
+  { feature: 'Elección de franja', express: 'Sí (3 hs)', lowcost: 'No', flex: 'No (estándar ML)', cuentaCorriente: 'Sí (3 hs)', ecom24: 'No', ecomSameDay: 'A coordinar' },
+  { feature: 'Precio', express: '$3.700 (0-3 km)', lowcost: '$3.000 (0-3 km)', flex: '$3.000 (Nivel 1)', cuentaCorriente: 'Tarifa LowCost', ecom24: `${ECOMMERCE_24HS_PRICE_DISPLAY} por envío`, ecomSameDay: `${SAME_DAY_PRICE} fijo` },
+  { feature: 'Ideal para', express: 'Urgencias, trámites, repuestos', lowcost: 'Emprendedores, envíos esporádicos', flex: 'Vendedores MercadoLibre', cuentaCorriente: 'Comercios con pedidos diarios', ecom24: 'Tiendas online sin apuro', ecomSameDay: 'Marcas con stock en depósito' },
 ];
 
 export default function ServiciosPage() {
   return (
-    <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
+    <main className="min-h-dvh bg-white text-brand-blue-500 relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Hero Section */}
-      <section
-        id="servicios-hero"
-        aria-label="Catálogo integral de servicios de mensajería y logística urbana en Mar del Plata"
-        className="relative isolate flex min-h-[75dvh] lg:min-h-[85dvh] w-full flex-col justify-center overflow-hidden bg-brand-blue-500 text-white border-b-4 border-brand-yellow-500"
-      >
-        <HeroProceduralBackground variant="default" tone="blue" />
+      <section className="relative bg-brand-blue-500 text-white pt-24 pb-16 lg:pt-32 lg:pb-20 overflow-hidden border-b border-brand-blue-400">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(#FFEC01_1px,transparent_1px)] bg-size-[16px_16px]" />
+        </div>
+        <div className="absolute -top-32 -left-32 w-125 h-125 rounded-full pointer-events-none bg-brand-yellow-500/10 blur-[120px]" />
+        <div className="absolute top-1/4 -right-32 w-150 h-150 rounded-full pointer-events-none bg-brand-blue-500/10 blur-[120px]" />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-            {/* LEFT 7 */}
-            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
-              <Badge
-                variant="accent"
-                size="lg"
-                className="-rotate-1"
-                icon={<ShieldCheck className="h-4 w-4" aria-hidden="true" />}
-              >
-                Flota 100% Propia en MDQ
-              </Badge>
-
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display uppercase tracking-[-0.03em] leading-[0.92] text-white text-balance">
-                <span className="block">Catálogo Oficial</span>
-                <Knockout>Servicios 2026</Knockout>
-              </h1>
-
-              <p className="text-base sm:text-lg font-sans text-white/90 max-w-[56ch] mx-auto lg:mx-0 leading-relaxed font-light">
-                Soluciones logísticas a medida para particulares, comercios e industrias de Mar del Plata. Rapidez, seriedad y base operativa física en Friuli 1972.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start pt-1">
-                <CTANestedPill
-                  href="/cotizar"
-                  variant="primary"
-                  size="large"
-                  icon={<ShieldCheck className="w-5 h-5" />}
-                  iconPosition="left"
-                >
-                  Cotizá tu envío ahora
-                </CTANestedPill>
-                <a
-                  href="#grilla-servicios"
-                  className="inline-flex min-h-11 items-center gap-2 font-subheading text-sm sm:text-base uppercase tracking-wider text-white underline decoration-brand-yellow-500 decoration-2 underline-offset-4 hover:text-brand-yellow-500 transition-colors"
-                >
-                  <span>Ver los 7 servicios disponibles</span>
-                </a>
-              </div>
-
-              {/* Chips */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs font-mono text-white/80">
-                <span>Express en 3 hs</span>
-                <span>·</span>
-                <span>LowCost en el día</span>
-                <span>·</span>
-                <span>Mercado Envíos Flex</span>
-                <span>·</span>
-                <span>Fulfillment 3PL</span>
-              </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-yellow-500 text-brand-blue-500 font-subheading text-xs uppercase font-bold tracking-wider mb-4">
+              <Package className="w-3.5 h-3.5" />
+              <span>SEIS SOLUCIONES · UNA FLOTA · MDQ 2026</span>
             </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display uppercase tracking-tight text-white leading-none">
+              NUESTROS <span className="text-brand-yellow-500">SERVICIOS</span>
+            </h1>
+            <p className="mt-4 text-base sm:text-lg text-brand-blue-100 font-sans leading-relaxed font-light max-w-2xl">
+              Llegamos a todo Mar del Plata.
+              Tarifas transparentes 2026. Flota propia, base en Friuli 1972.
+            </p>
 
-            {/* RIGHT 5 */}
-            <div className="lg:col-span-5 relative w-full flex flex-col items-center justify-center">
-              <DoubleBezelCard
-                className="w-full max-w-md shadow-2xl"
-                innerClassName="p-6 sm:p-8 space-y-4"
-              >
-                <div className="flex items-center justify-between border-b border-brand-blue-100 pb-3">
-                  <span className="font-subheading text-xs font-bold uppercase tracking-wider text-brand-blue-500">
-                    Garantías Operativas
-                  </span>
-                  <span className="font-mono text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">
-                    Vigente 2026
-                  </span>
-                </div>
-
-                <div className="space-y-3 font-sans text-xs text-brand-blue-500">
-                  <div className="p-3 rounded-xl bg-brand-blue-50/60">
-                    <strong className="block text-sm font-display uppercase text-brand-blue-600 mb-0.5">
-                      Base Central en Friuli 1972
-                    </strong>
-                    <span>Depósito propio para drop-off bonificado (-20%), guarda y consolidación.</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-brand-blue-50/60">
-                    <strong className="block text-sm font-display uppercase text-brand-blue-600 mb-0.5">
-                      Repartidores Registrados
-                    </strong>
-                    <span>Cero tercerización anónima: conductores profesionales con seguro y remito.</span>
-                  </div>
-                </div>
-              </DoubleBezelCard>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <CTANestedPill href="/cotizar" variant="primary" size="large">
+                Cotizá tu envío
+              </CTANestedPill>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Grid de Servicios */}
-      <section id="grilla-servicios" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {SERVICES.map((s) => {
-            const Icon = s.icon;
+      {/* Services Grid - 6 cards: 3 cols on lg for 6 items = 2 rows */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service) => {
+            const Icon = service.icon;
             return (
-              <DoubleBezelCard
-                key={s.href}
-                className="group h-full"
-                innerClassName="p-6 sm:p-7 bg-white h-full flex flex-col justify-between transition-all group-hover:border-brand-blue-300"
+              <Link
+                key={service.id}
+                id={service.id}
+                href={service.href}
+                className="group relative scroll-mt-28 double-bezel-outer p-2 rounded-3xl bg-brand-blue-50/70 border border-brand-blue-100 shadow-float hover:shadow-hover-lift hover:border-brand-blue-300 transition-all duration-300 ease-out flex flex-col text-brand-blue-500"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-xl bg-brand-blue-50 text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-brand-yellow-500 transition-colors flex items-center justify-center font-bold">
-                      <Icon className="w-6 h-6" />
+                <div className="bg-white p-6 rounded-2xl shadow-xs flex flex-col justify-between h-full relative overflow-hidden border border-brand-blue-100/60">
+                  <div className="space-y-4 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <span className="-rotate-1 inline-block bg-brand-yellow-500 text-brand-blue-500 font-bold font-subheading text-xs tracking-wider px-3 py-1 rounded-full shadow-glow-yellow">
+                        {service.badge}
+                      </span>
+                      <div className="w-12 h-12 rounded-xl bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center shrink-0 border border-brand-blue-200 shadow-xs group-hover:bg-brand-yellow-500 group-hover:border-brand-yellow-400 transition-colors duration-200">
+                        <Icon className="w-6 h-6 shrink-0" />
+                      </div>
                     </div>
-                    <Badge variant="neutral" size="sm">
-                      {s.badge}
-                    </Badge>
+
+                    <div>
+                      <span className="text-xs font-subheading tracking-wider uppercase text-brand-blue-500 font-bold">
+                        {service.label}
+                      </span>
+                      <h3 className="text-2xl font-display uppercase tracking-tight text-brand-blue-500 mt-1 leading-tight min-h-12">
+                        {service.title}
+                      </h3>
+                    </div>
+
+                    <p className="text-sm leading-relaxed font-sans text-brand-blue-500/80">
+                      {service.description}
+                    </p>
+
+                    {/* 3 Metric Pills: ENTREGA | CORTE | TARIFA */}
+                    <div className="grid grid-cols-3 gap-2 pt-3 pb-3 border-y border-brand-blue-100/70 text-center">
+                      <div className="bg-brand-blue-50/80 border border-brand-blue-100/60 p-2 rounded-xl">
+                        <div className="text-xs font-bold font-subheading text-brand-blue-500 truncate">{service.stats.entrega}</div>
+                        <div className="text-[10px] uppercase font-bold tracking-wider text-brand-blue-500">ENTREGA</div>
+                      </div>
+                      <div className="bg-brand-blue-50/80 border border-brand-blue-100/60 p-2 rounded-xl">
+                        <div className="text-xs font-bold font-subheading text-brand-blue-500 truncate">{service.stats.corte}</div>
+                        <div className="text-[10px] uppercase font-bold tracking-wider text-brand-blue-500">CORTE</div>
+                      </div>
+                      <div className="bg-brand-blue-50/80 border border-brand-blue-100/60 p-2 rounded-xl">
+                        <div className="text-xs font-bold font-mono text-brand-blue-500 truncate">{service.stats.tarifa}</div>
+                        <div className="text-[10px] uppercase font-bold tracking-wider text-brand-blue-500">TARIFA</div>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-blue-400 block mb-0.5">
-                      {s.highlight}
-                    </span>
-                    <h2 className="font-display text-2xl uppercase tracking-tight text-brand-blue-500 group-hover:text-brand-blue-600">
-                      {s.title}
-                    </h2>
-                  </div>
+                  <div className="pt-4 border-t border-brand-blue-100/60 relative z-10 space-y-4">
+                    <ul className="space-y-2">
+                      {service.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2 text-xs text-brand-blue-500">
+                          <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-yellow-500" />
+                          <span className="font-sans">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
 
-                  <p className="font-sans text-sm text-brand-blue-400 leading-relaxed mb-6">
-                    {s.desc}
-                  </p>
+                    <CTANestedPill
+                      href={service.href}
+                      variant="primary"
+                      size="default"
+                      className="w-full justify-center"
+                    >
+                      {service.cta}
+                    </CTANestedPill>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Comparison Table - 7 columns */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <h2 className="font-display text-3xl sm:text-4xl uppercase text-brand-blue-500">
+            COMPARATIVA RÁPIDA
+          </h2>
+          <p className="font-sans text-sm sm:text-base text-brand-blue-500 mt-2">
+            Elegí el servicio que mejor se adapte a tu necesidad operativa y presupuesto.
+          </p>
+        </div>
+
+        {/* Vista Mobile (<sm) — Tarjetas de Resumen Vertical */}
+        <div className="grid grid-cols-1 gap-4 sm:hidden">
+          {services.map((svc) => {
+            const expKey = svc.id === 'envios-express' ? 'express'
+              : svc.id === 'envios-lowcost' ? 'lowcost'
+              : svc.id === 'enviosflex' ? 'flex'
+              : svc.id === 'cuenta-corriente-flexible' ? 'cuentaCorriente'
+              : svc.id === 'ecommerce-24hs' ? 'ecom24'
+              : 'ecomSameDay';
+
+            return (
+              <div
+                key={svc.id}
+                className="rounded-2xl border border-brand-blue-100 bg-white p-5 shadow-sm space-y-3"
+              >
+                <div className="flex items-center justify-between pb-3 border-b border-brand-blue-100">
+                  <span className="font-subheading text-base font-bold uppercase tracking-wide text-brand-blue-500">
+                    {svc.label}
+                  </span>
+                  <span className="text-2xs font-bold tracking-widest bg-brand-yellow-500 text-brand-blue-500 px-2.5 py-1 rounded-full uppercase font-subheading">
+                    {svc.badge}
+                  </span>
                 </div>
 
-                <div className="pt-4 border-t border-brand-blue-100 flex items-center justify-between">
+                <div className="space-y-2 text-xs font-sans">
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-blue-500/80 font-medium">Precio Base:</span>
+                    <span className="font-mono font-bold text-brand-blue-500 text-sm">{svc.price}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-blue-500/80 font-medium">Entrega:</span>
+                    <span className="font-semibold text-brand-blue-500">{comparisonTable[0][expKey]}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-blue-500/80 font-medium">Corte:</span>
+                    <span className="text-brand-blue-500">{comparisonTable[1][expKey]}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-blue-500/80 font-medium">Franja:</span>
+                    <span className="text-brand-blue-500">{comparisonTable[2][expKey]}</span>
+                  </div>
+                  <div className="pt-2 border-t border-brand-blue-100/60">
+                    <span className="text-brand-blue-500/80 font-medium block mb-0.5">Ideal para:</span>
+                    <span className="text-brand-blue-500 font-medium">{comparisonTable[4][expKey]}</span>
+                  </div>
+                </div>
+
+                <div className="pt-2">
                   <Link
-                    href={s.href}
-                    className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-wider text-brand-blue-500 group-hover:text-brand-blue-600 transition-colors"
+                    href={svc.href}
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-brand-blue-50 text-brand-blue-500 font-subheading text-xs uppercase font-bold tracking-wider hover:bg-brand-blue-100 transition-colors"
                   >
-                    <span>Ver especificaciones y tarifas</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    Ver detalles del servicio →
                   </Link>
                 </div>
-              </DoubleBezelCard>
+              </div>
             );
           })}
         </div>
 
-        {/* Global CTA */}
-        <ServiceCta
-          title="¿Tenés dudas sobre cuál servicio elegir?"
-          subtitle="Escribinos con origen, destino y tipo de mercadería. Te asesoramos al instante sobre la opción más rápida y económica para tu envío."
-          whatsappMessage="Hola Envíos DosRuedas! Quisiera que me asesoren sobre qué servicio me conviene para mi envío."
-        />
+        {/* Vista Desktop (sm+) — Tabla clásica */}
+        <div className="hidden sm:block overflow-x-auto rounded-2xl border border-brand-blue-100 bg-white shadow-sm">
+          <table className="w-full font-sans text-sm">
+            <thead>
+              <tr className="bg-brand-blue-500 text-white">
+                <th className="p-4 text-left font-subheading uppercase tracking-wider">CARACTERÍSTICA</th>
+                <th className="p-4 text-center font-subheading uppercase tracking-wider">EXPRESS</th>
+                <th className="p-4 text-center font-subheading uppercase tracking-wider">LOWCOST</th>
+                <th className="p-4 text-center font-subheading uppercase tracking-wider">FLEX</th>
+                <th className="p-4 text-center font-subheading uppercase tracking-wider">CTA FLEXIBLE</th>
+                <th className="p-4 text-center font-subheading uppercase tracking-wider">E-COM 24HS</th>
+                <th className="p-4 text-center font-subheading uppercase tracking-wider">E-COM SAME-DAY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonTable.map((row, idx) => (
+                <tr key={row.feature} className={idx % 2 === 0 ? 'bg-brand-blue-50/50' : 'bg-white'}>
+                  <td className="p-4 font-medium text-brand-blue-500 border-t border-brand-blue-100">{row.feature}</td>
+                  <td className="p-4 text-center text-brand-blue-500 border-t border-brand-blue-100 font-mono">{row.express}</td>
+                  <td className="p-4 text-center text-brand-blue-500 border-t border-brand-blue-100 font-mono">{row.lowcost}</td>
+                  <td className="p-4 text-center text-brand-blue-500 border-t border-brand-blue-100 font-mono">{row.flex}</td>
+                  <td className="p-4 text-center text-brand-blue-500 border-t border-brand-blue-100 font-mono">{row.cuentaCorriente}</td>
+                  <td className="p-4 text-center text-brand-blue-500 border-t border-brand-blue-100 font-mono">{row.ecom24}</td>
+                  <td className="p-4 text-center text-brand-blue-500 border-t border-brand-blue-100 font-mono">{row.ecomSameDay}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="font-sans text-xs text-brand-blue-500">
+            * Tarifas vigentes 2026. Precios base 0-3 km. Consultá cobertura completa en
+            <Link href="/cobertura" className="underline hover:text-brand-blue-500 font-medium">/cobertura</Link>
+          </p>
+        </div>
+      </section>
+
+      {/* CTA Final */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="bg-brand-blue-50/80 border border-brand-blue-100 p-3 rounded-[28px] shadow-float">
+          <div className="bg-white p-6 sm:p-10 rounded-[20px] border border-brand-blue-50/50 shadow-sm text-center">
+            <div className="w-16 h-16 rounded-xl bg-brand-yellow-500 text-brand-blue-500 flex items-center justify-center font-bold mx-auto mb-6">
+              <MessageSquare className="w-8 h-8" />
+            </div>
+            <h3 className="font-subheading text-2xl sm:text-3xl uppercase font-bold text-brand-blue-500 mb-3">
+              ¿CUÁL ES EL SERVICIO IDEAL PARA VOS?
+            </h3>
+            <p className="font-sans text-base sm:text-lg text-brand-blue-500 leading-relaxed max-w-2xl mx-auto mb-6">
+              Te asesoramos sin compromiso. Contanos qué necesitás y te recomendamos la mejor opción.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <CTANestedPill href="https://api.whatsapp.com/send/?phone=542236602699" variant="primary" size="large">
+                Asesorame por WhatsApp
+              </CTANestedPill>
+              <CTANestedPill href="/cobertura" variant="elevated" size="large">
+                Ver Cobertura
+              </CTANestedPill>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

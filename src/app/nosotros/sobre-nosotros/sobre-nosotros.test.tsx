@@ -1,0 +1,88 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { OPERATING_HOURS } from '@/lib/promises';
+import SobreNosotrosPage from './page';
+
+describe('SobreNosotrosPage — Tier 1 & 2', () => {
+  // ─── TIER 1: HAPPY PATHS (5 tests) ──────────────────────────────────────────
+
+  it('T1.1: renderiza la sección principal de Sobre Nosotros sin errores', () => {
+    const { container } = render(<SobreNosotrosPage />);
+    expect(container.querySelector('main')).toBeInTheDocument();
+  });
+
+  it('T1.2: renderiza el título monumental del hero en Anton', () => {
+    render(<SobreNosotrosPage />);
+    // El H1 se compone de varios spans (texto + Knockout), así que se valida
+    // contra el textContent completo del h1 en vez de contra un span suelto.
+    const heading = document.querySelector('#about-hero h1');
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent(/Más que cadetería/i);
+    expect(heading).toHaveTextContent(/somos logística/i);
+    expect(heading).toHaveTextContent(/de confianza/i);
+    expect(heading?.className).toContain('font-display');
+  });
+
+  it('T1.3: renderiza las tarjetas con la arquitectura Double-Bezel del sistema de diseño', () => {
+    const { container } = render(<SobreNosotrosPage />);
+    const outerBezels = container.querySelectorAll('.rounded-\\[28px\\], .rounded-\\[30px\\], .double-bezel-outer');
+    const innerBezels = container.querySelectorAll('.rounded-\\[20px\\], .double-bezel-inner');
+    expect(outerBezels.length).toBeGreaterThanOrEqual(1);
+    expect(innerBezels.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('T1.4: renderiza el timeline con hitos históricos y años correspondientes', () => {
+    render(<SobreNosotrosPage />);
+    expect(screen.getByText('2019')).toBeInTheDocument();
+    expect(screen.getAllByText('2026')[0]).toBeInTheDocument();
+    expect(screen.getByText('Lanzamiento Inicial en MDQ')).toBeInTheDocument();
+  });
+
+  it('T1.5: renderiza la Base central de Friuli 1972 con sus horarios', () => {
+    render(<SobreNosotrosPage />);
+    // El hero ya no muestra un "corte" (el corte 13:00 es de LowCost, no de la
+    // base): muestra la base y su horario real, que viene de promesas.ts.
+    expect(screen.getAllByText('Base central').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Friuli 1972').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(OPERATING_HOURS.weekdays).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(OPERATING_HOURS.saturdays).length).toBeGreaterThan(0);
+  });
+
+  // ─── TIER 2: BOUNDARY & CORNER CASES (5 tests) ─────────────────────────────
+
+  it('T2.1: conserva la estructura y clases de responsividad móvil por debajo de 768px', () => {
+    const { container } = render(<SobreNosotrosPage />);
+    const gridCols = container.querySelector('.grid');
+    expect(gridCols?.className).toContain('grid-cols-1');
+    expect(gridCols?.className).toContain('lg:grid-cols-12');
+  });
+
+  it('T2.2: renderiza correctamente con imágenes externas mockeadas sin lanzar excepciones', () => {
+    render(<SobreNosotrosPage />);
+    const imgs = screen.getAllByRole('img');
+    expect(imgs.length).toBeGreaterThan(0);
+    imgs.forEach(img => {
+      expect(img).toHaveAttribute('src');
+    });
+  });
+
+  it('T2.3: aplica las variables de color institucionales correctas (Azul #0950F6 / Amarillo #FFEC01)', () => {
+    const { container } = render(<SobreNosotrosPage />);
+    const heroSection = container.querySelector('#about-hero');
+    expect(heroSection?.className).toContain('bg-brand-blue-500');
+  });
+
+  it('T2.4: renderiza las descripciones de valores corporativos sin truncamientos de maquetación', () => {
+    render(<SobreNosotrosPage />);
+    expect(screen.getByText('Transparencia Total')).toBeInTheDocument();
+    expect(screen.getByText('Cuidado del Paquete')).toBeInTheDocument();
+    expect(screen.getByText('Innovación Tecnológica')).toBeInTheDocument();
+  });
+
+  it('T2.5: verifica que la tipografía de ingeniería (font-sans) está declarada en contenedores pesados', () => {
+    const { container } = render(<SobreNosotrosPage />);
+    const sansDivs = container.querySelectorAll('.font-sans');
+    expect(sansDivs.length).toBeGreaterThan(0);
+  });
+});

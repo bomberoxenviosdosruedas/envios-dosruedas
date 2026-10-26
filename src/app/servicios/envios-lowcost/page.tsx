@@ -1,77 +1,150 @@
 import React from 'react';
-import type { Metadata } from 'next';
-import { PiggyBank } from 'lucide-react';
-import ServiceHero from '@/components/servicios/ServiceHero';
-import ServiceSpecs from '@/components/servicios/ServiceSpecs';
-import ServicePricingTable from '@/components/servicios/ServicePricingTable';
-import ServiceCta from '@/components/servicios/ServiceCta';
+import { Metadata } from 'next';
+import LowCostHero from '@/components/servicios/lowcost/LowCostHero';
+import LowCostFeatures from '@/components/servicios/lowcost/LowCostFeatures';
+import LowCostPricing from '@/components/servicios/lowcost/LowCostPricing';
+import LowCostBenefits from '@/components/servicios/lowcost/LowCostBenefits';
+import LowCostHowItWorks from '@/components/servicios/lowcost/LowCostHowItWorks';
 
 const baseUrl = 'https://www.enviosdosruedas.com';
 
 export const metadata: Metadata = {
-  title: 'Envíos LowCost en Mar del Plata | Tarifa Económica Programada',
+  title: 'Envíos LowCost y Cadetería en el Día',
   description:
-    'La opción más económica para envíos en el día en Mar del Plata. Reparto en hoja de ruta hasta las 19:00 hs. Horario de corte: 13:00 hs. Tarifas oficiales 2026.',
-  alternates: { canonical: `${baseUrl}/servicios/envios-lowcost` },
+    'Paquetería y cadetería programada con entrega en el día en Mar del Plata. Pedidos antes de las 13:00 hs se entregan antes de las 19:00 hs con tarifa fija.',
+  alternates: {
+    canonical: `${baseUrl}/servicios/envios-lowcost`,
+  },
   openGraph: {
-    title: 'Envíos LowCost en el Día | Envíos DosRuedas',
+    title: 'Envíos LowCost y Cadetería en el Día | Envíos DosRuedas',
     description:
-      'Ahorrá hasta un 35% agrupando tus envíos en Mar del Plata. Retiramos antes de las 14:00 y entregamos en el día.',
+      'El servicio de cadetería y encomiendas más económico de Mar del Plata. Pedidos antes de las 13:00 hs se entregan antes de las 19:00 hs.',
     url: `${baseUrl}/servicios/envios-lowcost`,
     type: 'website',
     locale: 'es_AR',
     images: [`${baseUrl}/og-image.jpg`],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Envíos LowCost y Cadetería en el Día | Envíos DosRuedas',
+    description: 'El servicio de cadetería y encomiendas más económico de Mar del Plata. Pedidos antes de las 13:00 hs se entregan antes de las 19:00 hs.',
+    images: [`${baseUrl}/og-image.jpg`],
+    creator: '@enviosdosruedas',
+  },
 };
 
-const LOW_COST_PRICING_ROWS = [
-  { range: '0 a 3 km', price: '$3.000', note: 'Tarifa mínima urbana' },
-  { range: '3 a 5 km', price: '$4.000', note: 'Barrios intermedios de MDP' },
-  { range: '5 a 7 km', price: '$5.300', note: 'Zonas Norte, Sur y Oeste consolidadas' },
-  { range: '7 a 10 km', price: '$7.000', note: 'Periferia urbana residencial' },
-  { range: '+10 km', price: '$700 / km', note: 'Cálculo lineal total redondeado (hasta 20 km)' },
-  { range: '+20 km', price: 'A consultar', note: 'Destinos periféricos o interurbanos' },
-];
+const jsonLdSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Paquetería E-Commerce, Servicio de Cadetería y Encomiendas LowCost en Mar del Plata',
+  description:
+    'Servicio de paquetería e-commerce, cadetería y encomiendas programadas de máxima rentabilidad en Mar del Plata. Pedidos ingresados antes de las 13:00 hs con entrega garantizada antes de las 19:00 hs.',
+  url: `${baseUrl}/servicios/envios-lowcost`,
+  provider: {
+    '@type': 'LocalBusiness',
+    '@id': `${baseUrl}#localbusiness`,
+    name: 'Envíos DosRuedas',
+    telephone: '+54-223-660-2699',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Friuli 1972',
+      addressLocality: 'Mar del Plata',
+      addressRegion: 'Buenos Aires',
+      postalCode: '7600',
+      addressCountry: 'AR',
+    },
+  },
+  areaServed: {
+    '@type': 'City',
+    name: 'Mar del Plata',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Tarifas LowCost Vigentes 2026',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        name: 'LowCost 0 a 3 km',
+        price: '3000',
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+      },
+      {
+        '@type': 'Offer',
+        name: 'LowCost 3 a 5 km',
+        price: '4000',
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+      },
+      {
+        '@type': 'Offer',
+        name: 'LowCost 5 a 7 km',
+        price: '5300',
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+      },
+      {
+        '@type': 'Offer',
+        name: 'LowCost 7 a 10 km',
+        price: '7000',
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+      },
+      {
+        '@type': 'Offer',
+        name: 'LowCost +10 km',
+        price: '7000',
+        priceCurrency: 'ARS',
+        availability: 'https://schema.org/InStock',
+        description: '$7.000 base más $700 por kilómetro adicional entero',
+      },
+    ],
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: baseUrl },
+    { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${baseUrl}/#servicios` },
+    { '@type': 'ListItem', position: 3, name: 'Envíos LowCost', item: `${baseUrl}/servicios/envios-lowcost` },
+  ],
+};
 
 export default function EnviosLowCostPage() {
   return (
-    <main className="min-h-dvh bg-white text-brand-blue-500 font-sans">
-      <ServiceHero
-        title="Cortás el pedido"
-        knockoutText="y lo recibís hoy"
-        subtitle="La tarifa más conveniente de la ciudad para envíos programados. Retiramos y entregamos en la misma jornada hasta las 19:00 hs optimizando las hojas de ruta. Ideal para emprendedores y compras no urgentes."
-        badge="Máximo Ahorro · Corte 13:00 hs"
-        icon={PiggyBank}
-        variant="lowcost"
-        tone="yellow"
-        whatsappMessage="Hola Envíos DosRuedas! Quisiera coordinar un envío en modalidad LowCost."
-        summaryMetrics={[
-          { label: 'Corte', value: '13:00 hs', desc: 'Recepción' },
-          { label: 'Entrega', value: 'Hasta 19 hs', desc: 'Mismo día' },
-          { label: 'Tarifa Base', value: '$3.000', desc: 'Hasta 3 km' },
-        ]}
+    <main className="min-h-dvh bg-white text-brand-blue-500 relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
-        <ServiceSpecs
-          corte="13:00 hs (Lunes a Viernes)"
-          entrega="Mismo día entre 14:00 y 19:00 hs (en hoja de ruta)"
-          capacidad="Hasta 5 kg y 40 × 40 × 30 cm (bulto extra desde $1.800)"
-          vehiculo="Moto de reparto consolidado urbano"
-          cobertura="Todo el casco urbano y corredores principales de Mar del Plata"
-        />
+      {/* Hero — el propio LowCostHero ya es el <section id="lowcost-hero"> */}
+      <LowCostHero />
 
-        <ServicePricingTable
-          title="Tarifas Oficiales Envíos LowCost (2026)"
-          rows={LOW_COST_PRICING_ROWS}
-          extraNote="* Servicio sujeto a corte a las 13:00 hs. En días de lluvia aplica recargo del 30% al 50%. Espera en puerta: 10 min sin cargo, luego $2.200 cada 10 min adicionales. Régimen Simplificado: Emitimos Factura C, no Factura A."
-        />
+      {/* Ruteo masivo features — White Canvas */}
+      <section className="relative z-10 bg-white font-sans">
+        <LowCostFeatures />
+      </section>
 
-        <ServiceCta
-          title="¿Querés despachar con la tarifa más baja de Mar del Plata?"
-          subtitle="Completá origen y destino en el cotizador interactivo o envianos un WhatsApp para coordinar tu retiro hoy."
-          whatsappMessage="Hola Envíos DosRuedas! Tengo paquetes para despacho LowCost hoy antes de las 13:00 hs."
-        />
+      {/* 2026 Zone Pricing rates table — Electric Speed Blue (brand-blue-500) */}
+      <section className="relative z-10 bg-brand-blue-500">
+        <LowCostPricing />
+      </section>
+
+      {/* Structured logistics benefits grid — Deep Midnight Navy (brand-blue-500) */}
+      <section className="relative z-10 bg-brand-blue-500 font-sans">
+        <LowCostBenefits />
+      </section>
+
+      {/* Step by step operation diagram — White Canvas */}
+      <section className="relative z-10 bg-white font-sans">
+        <LowCostHowItWorks />
       </section>
     </main>
   );

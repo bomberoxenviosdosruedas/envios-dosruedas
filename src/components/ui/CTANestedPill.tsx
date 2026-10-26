@@ -1,6 +1,10 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { trackAnalytics } from '@/lib/analytics';
 
 export type CTANestedPillVariant = 'primary' | 'blue' | 'elevated' | 'outline' | 'ghost';
 export type CTANestedPillSize = 'compact' | 'default' | 'large' | 'lg';
@@ -18,6 +22,14 @@ export interface CTANestedPillProps extends React.ButtonHTMLAttributes<HTMLButto
   rel?: string;
 }
 
+/**
+ * CTANestedPill Component
+ * Standardized nested pill CTA interactive element (Button or Link).
+ * Follows DESIGN.md specifications:
+ * - Rounded-full, font-subheading, uppercase, tracking-wider, font-bold
+ * - Embedded circular icon chip (w-8 h-8) with smooth hover translation
+ * - Variants: --primary (yellow), --blue (para fondos amarillos), --elevated (white), --outline, --ghost
+ */
 export const CTANestedPill = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, CTANestedPillProps>(
   (
     {
@@ -33,55 +45,110 @@ export const CTANestedPill = React.forwardRef<HTMLButtonElement | HTMLAnchorElem
       rel,
       disabled,
       onClick,
-      type = 'button',
+      type,
       ...restProps
     },
     ref
   ) => {
-    const isLg = size === 'large' || size === 'lg';
-    const isCompact = size === 'compact';
+    const baseStyles =
+      'cta-nested-pill group inline-flex items-center justify-between gap-3 rounded-full font-subheading uppercase tracking-wider transition-[transform,background-color,border-color,box-shadow] duration-160 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 select-none border';
 
-    const baseWrapper =
-      'inline-flex items-center justify-center p-0.5 rounded-full font-subheading uppercase font-bold tracking-wider select-none transition-all duration-200';
+    const normalizedSize = size === 'lg' ? 'large' : size;
 
-    const wrapperVariantStyles: Record<CTANestedPillVariant, string> = {
-      primary: 'bg-brand-yellow-400 hover:bg-brand-yellow-300 shadow-xs active:scale-[0.98]',
-      blue: 'bg-white/20 hover:bg-white/30 border border-white/30 text-white',
-      elevated: 'bg-linear-to-b from-brand-yellow-300 to-brand-yellow-500 shadow-md hover:shadow-lg',
-      outline: 'border-2 border-brand-blue-500 hover:bg-brand-blue-50',
-      ghost: 'hover:bg-brand-blue-50/50',
-    };
+    const sizeStyles = {
+      compact: 'px-4 py-2 text-xs min-h-11',
+      default: 'px-5 py-2 text-sm min-h-11',
+      large: 'px-8 py-3 text-base min-h-13',
+    }[normalizedSize];
 
-    const innerPill = cn(
-      'inline-flex items-center justify-center gap-2 rounded-full transition-all duration-200',
-      isCompact && 'px-3.5 py-1 text-xs',
-      size === 'default' && 'px-5 py-2.5 text-sm',
-      isLg && 'px-7 py-3.5 text-base',
-      variant === 'primary' && 'bg-brand-yellow-500 text-brand-blue-500 font-extrabold',
-      variant === 'blue' && 'bg-brand-blue-500 text-white',
-      variant === 'elevated' && 'bg-white text-brand-blue-500 shadow-xs',
-      variant === 'outline' && 'text-brand-blue-500',
-      variant === 'ghost' && 'text-brand-blue-500'
+    // Anillo de foco bimodal: amarillo sobre azul (primary, elevated) y azul sobre blanco/amarillo (blue, outline, ghost)
+    const focusRingStyles = {
+      primary: 'focus-visible:ring-brand-yellow-500 focus-visible:ring-offset-brand-blue-500',
+      blue: 'focus-visible:ring-brand-blue-500 focus-visible:ring-offset-brand-yellow-500',
+      elevated: 'focus-visible:ring-brand-yellow-500 focus-visible:ring-offset-brand-blue-500',
+      outline: 'focus-visible:ring-brand-blue-500 focus-visible:ring-offset-white',
+      ghost: 'focus-visible:ring-brand-blue-500 focus-visible:ring-offset-white',
+    }[variant];
+
+    const variantStyles = {
+      primary:
+        'bg-brand-yellow-500 text-brand-blue-500 border-brand-yellow-500 shadow-accent-sm hover:shadow-cta-glow hover:bg-brand-yellow-400 active:scale-[0.97]',
+      // Para fondos amarillos (#FFEC01): azul de marca, texto blanco, chip amarillo.
+      blue: 'bg-brand-blue-500 text-white border-brand-blue-500 shadow-[0_0_24px_rgba(9,80,246,0.28)] hover:bg-brand-blue-500 hover:border-brand-blue-500 active:scale-[0.97]',
+      elevated:
+        'bg-white text-brand-blue-500 border-brand-blue-100 shadow-elevated hover:shadow-hover-lift hover:border-brand-blue-300 hover:text-brand-blue-500 active:scale-[0.97]',
+      outline:
+        'bg-transparent text-brand-blue-500 border-2 border-brand-blue-500 hover:bg-brand-blue-50 active:scale-[0.97]',
+      ghost:
+        'bg-transparent text-brand-blue-500 border-transparent hover:bg-brand-blue-50 active:scale-[0.97]',
+    }[variant];
+
+    const iconChipBase =
+      'cta-nested-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-160 ease-out';
+
+    const iconChipVariantStyles = {
+      primary:
+        'bg-transparent text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-brand-yellow-500 group-hover:translate-x-1',
+      blue: 'bg-brand-yellow-500 text-brand-blue-500 group-hover:bg-brand-yellow-400 group-hover:translate-x-1',
+      elevated:
+        'bg-transparent text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-white group-hover:translate-x-1',
+      outline:
+        'bg-transparent text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-white group-hover:translate-x-1',
+      ghost:
+        'bg-transparent text-brand-blue-500 group-hover:bg-brand-blue-500 group-hover:text-white group-hover:translate-x-1',
+    }[variant];
+
+    const defaultIcon = <ArrowRight className="w-4 h-4" aria-hidden="true" />;
+    const renderedIcon = icon !== undefined ? icon : defaultIcon;
+
+    const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
+
+    const combinedClassName = cn(
+      baseStyles,
+      sizeStyles,
+      focusRingStyles,
+      variantStyles,
+      disabledStyles,
+      className
+    );
+
+    const iconContent = (
+      <span className={cn(iconChipBase, iconChipVariantStyles, iconClassName)}>
+        {renderedIcon}
+      </span>
     );
 
     const content = (
       <>
-        {icon && iconPosition === 'left' && <span className={cn('shrink-0', iconClassName)}>{icon}</span>}
-        <span>{children}</span>
-        {icon && iconPosition === 'right' && <span className={cn('shrink-0', iconClassName)}>{icon}</span>}
+        {iconPosition === 'left' && iconContent}
+        <span className="truncate">{children}</span>
+        {iconPosition === 'right' && iconContent}
       </>
     );
 
-    if (href) {
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+      if (href && (href.includes('wa.me') || href.includes('whatsapp.com'))) {
+        trackAnalytics.whatsappClick(restProps.id || 'cta_pill', typeof children === 'string' ? children : undefined);
+      } else if (restProps.id || typeof children === 'string') {
+        trackAnalytics.ctaClick(restProps.id || 'cta_pill', typeof children === 'string' ? children : 'cta');
+      }
+      if (onClick) {
+        onClick(e as React.MouseEvent<HTMLButtonElement>);
+      }
+    };
+
+    if (href && !disabled) {
       return (
         <Link
           href={href}
           ref={ref as React.Ref<HTMLAnchorElement>}
+          className={combinedClassName}
           target={target}
           rel={rel}
-          className={cn(baseWrapper, wrapperVariantStyles[variant], className)}
+          {...(restProps as Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'className' | 'target' | 'rel' | 'onClick'>)}
+          onClick={handleClick}
         >
-          <span className={innerPill}>{content}</span>
+          {content}
         </Link>
       );
     }
@@ -89,21 +156,18 @@ export const CTANestedPill = React.forwardRef<HTMLButtonElement | HTMLAnchorElem
     return (
       <button
         ref={ref as React.Ref<HTMLButtonElement>}
-        type={type}
+        type={type || 'button'}
         disabled={disabled}
-        onClick={onClick}
-        className={cn(
-          baseWrapper,
-          wrapperVariantStyles[variant],
-          disabled && 'opacity-60 cursor-not-allowed',
-          className
-        )}
-        {...(restProps as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+        className={combinedClassName}
+        {...restProps}
+        onClick={handleClick}
       >
-        <span className={innerPill}>{content}</span>
+        {content}
       </button>
     );
   }
 );
 
 CTANestedPill.displayName = 'CTANestedPill';
+
+export default CTANestedPill;
