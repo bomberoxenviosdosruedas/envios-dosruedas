@@ -31,7 +31,7 @@ export default function FlexFeatures() {
   return (
     <section
       id="flex-features"
-      className="py-24 bg-brand-white-50 relative z-10 overflow-hidden border-t border-brand-blue-100"
+      className="py-24 bg-brand-blue-50/40 relative z-10 overflow-hidden border-t border-b border-brand-blue-100/60"
     >
       <motion.div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"

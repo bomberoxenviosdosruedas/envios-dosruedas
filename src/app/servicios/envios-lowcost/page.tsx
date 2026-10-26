@@ -127,25 +127,17 @@ export default function EnviosLowCostPage() {
       {/* Hero — el propio LowCostHero ya es el <section id="lowcost-hero"> */}
       <LowCostHero />
 
-      {/* Ruteo masivo features — White Canvas */}
-      <section className="relative z-10 bg-white font-sans">
-        <LowCostFeatures />
-      </section>
+      {/* Ruteo masivo features */}
+      <LowCostFeatures />
 
-      {/* 2026 Zone Pricing rates table — Electric Speed Blue (brand-blue-500) */}
-      <section className="relative z-10 bg-brand-blue-500">
-        <LowCostPricing />
-      </section>
+      {/* 2026 Zone Pricing rates table */}
+      <LowCostPricing />
 
-      {/* Structured logistics benefits grid — Deep Midnight Navy (brand-blue-500) */}
-      <section className="relative z-10 bg-brand-blue-500 font-sans">
-        <LowCostBenefits />
-      </section>
+      {/* Structured logistics benefits grid */}
+      <LowCostBenefits />
 
-      {/* Step by step operation diagram — White Canvas */}
-      <section className="relative z-10 bg-white font-sans">
-        <LowCostHowItWorks />
-      </section>
+      {/* Step by step operation diagram */}
+      <LowCostHowItWorks />
     </main>
   );
 }

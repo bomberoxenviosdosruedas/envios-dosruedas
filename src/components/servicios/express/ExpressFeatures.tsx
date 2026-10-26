@@ -44,7 +44,7 @@ export default function ExpressFeatures() {
   return (
     <section
       id="express-features"
-      className="py-24 bg-brand-white-50 relative z-10 overflow-hidden border-t border-brand-blue-50"
+      className="py-24 bg-brand-blue-50/40 relative z-10 overflow-hidden border-t border-b border-brand-blue-100/60"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">

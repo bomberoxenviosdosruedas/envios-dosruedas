@@ -60,14 +60,14 @@ export default function DepositoPricing() {
       subtitle="Almacenamos tu stock en Friuli 1972. Cuando vendés, nosotros empaquetamos, etiquetamos y despachamos en el día."
       rangeLabel="Todo Mar del Plata"
       unit="/ envío"
-      tone="light"
+      tone="dark"
       tiers={SAME_DAY_TIERS}
       ctaLabel={() => 'Solicitar plan 3PL'}
       featuredIndex={0}
       ctaHref="https://api.whatsapp.com/send/?phone=542236602699"
       ctaVariant="primary"
       facts={SAME_DAY_FACTS}
-      backgroundClassName="bg-brand-blue-500 text-white"
+      backgroundClassName="bg-brand-blue-500 text-white border-t border-white/10"
     />
   );
 }

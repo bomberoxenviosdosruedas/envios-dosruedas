@@ -120,14 +120,14 @@ export default function EmprendedoresPricing() {
         subtitle="Elegí la modalidad e-commerce que mejor impulse tu marca."
         rangeLabel="Soluciones 3PL y E-commerce"
         unit="/ envío"
-        tone="light"
+        tone="dark"
         tiers={PLANS}
         ctaLabel={(idx) => `Consultar ${PLANS[idx].range}`}
         featuredIndex={1}
         ctaHref="https://api.whatsapp.com/send/?phone=542236602699"
         ctaVariant="primary"
         facts={EMPRENDEDORES_FACTS}
-        backgroundClassName="bg-brand-blue-500 text-white"
+        backgroundClassName="bg-brand-blue-500 text-white border-t border-white/10"
       />
 
       <ServicePricing
@@ -136,14 +136,14 @@ export default function EmprendedoresPricing() {
         subtitle={`Distribución programada Next Day con costos fijos escalonados. DropOFF -${DROPOFF_DISCOUNT_PERCENT}% trayendo paquetes a Friuli 1972.`}
         rangeLabel="Escalas por volumen mensual"
         unit="/ envío"
-        tone="light"
+        tone="dark"
         tiers={PLANS_24HS}
         ctaLabel={(idx) => `Elegir plan ${PLANS_24HS[idx].range}`}
         featuredIndex={1}
         ctaHref="https://api.whatsapp.com/send/?phone=542236602699"
         ctaVariant="primary"
         facts={FACTS_24HS}
-        backgroundClassName="bg-brand-blue-500 text-brand-blue-500"
+        backgroundClassName="bg-brand-blue-500 text-white border-t border-white/10"
       />
     </div>
   );

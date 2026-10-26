@@ -30,7 +30,7 @@ export default function ExpressUseCases() {
   return (
     <section
       id="express-use-cases"
-      className="py-24 bg-brand-white-50 relative z-10 overflow-hidden border-t border-brand-blue-50"
+      className="py-24 bg-brand-blue-50/30 relative z-10 overflow-hidden border-t border-brand-blue-100/60"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">

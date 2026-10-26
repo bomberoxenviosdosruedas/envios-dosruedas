@@ -63,14 +63,14 @@ export default function Ecommerce24HSPricing() {
       subtitle={`Distribución programada Next Day con costos fijos escalonados. DropOFF -${DROPOFF_DISCOUNT_PERCENT}% trayendo paquetes a Friuli 1972.`}
       rangeLabel="Escalas por volumen mensual"
       unit="/ envío"
-      tone="light"
+      tone="dark"
       tiers={PLANS}
       ctaLabel={(idx) => `Elegir plan ${PLANS[idx].range}`}
       featuredIndex={FEATURED_PLAN_INDEX}
       ctaHref="https://api.whatsapp.com/send/?phone=542236602699"
       ctaVariant="primary"
       facts={ECOMMERCE_24HS_FACTS}
-      backgroundClassName="bg-brand-blue-500 text-white"
+      backgroundClassName="bg-brand-blue-500 text-white border-t border-white/10"
     />
   );
 }

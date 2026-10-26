@@ -111,20 +111,14 @@ export default function DepositoFulfillmentPage() {
       {/* Hero — el propio EmprendedoresHero pinta su fondo amarillo de marca */}
       <EmprendedoresHero />
 
-      {/* Corporate logistics features — White Canvas */}
-      <section className="relative z-10 bg-white font-sans">
-        <EmprendedoresFeatures />
-      </section>
+      {/* Corporate logistics features */}
+      <EmprendedoresFeatures />
 
-      {/* Strategic business benefits grid — Deep Midnight Navy (brand-blue-500) */}
-      <section className="relative z-10 bg-brand-blue-500 font-sans">
-        <EmprendedoresBenefits />
-      </section>
+      {/* Strategic business benefits grid */}
+      <EmprendedoresBenefits />
 
-      {/* Premium custom e-commerce plans and warehousing prices — Electric Speed Blue (brand-blue-500) */}
-      <section className="relative z-10 bg-brand-blue-500">
-        <EmprendedoresPricing />
-      </section>
+      {/* Premium custom e-commerce plans and warehousing prices */}
+      <EmprendedoresPricing />
     </main>
   );
 }

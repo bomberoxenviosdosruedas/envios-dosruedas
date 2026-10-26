@@ -265,7 +265,7 @@ export default function EmpresasCuentaCorrientePage() {
       </section>
 
       {/* Beneficios Corporativos */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-brand-white-50">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-brand-blue-50/40 border-b border-brand-blue-100/60">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="px-3 py-1 rounded-full bg-brand-blue-50 text-brand-blue-500 font-subheading text-xs uppercase font-bold tracking-widest border border-brand-blue-100">

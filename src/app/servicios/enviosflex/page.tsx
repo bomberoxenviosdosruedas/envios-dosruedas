@@ -106,30 +106,20 @@ export default function EnviosFlexPage() {
       {/* Hero — el propio FlexHero pinta su fondo azul de marca */}
       <FlexHero />
 
-      {/* MercadoLibre expert key features — White Canvas */}
-      <section className="relative z-10 bg-white font-sans">
-        <FlexFeatures />
-      </section>
+      {/* MercadoLibre expert key features */}
+      <FlexFeatures />
 
-      {/* Seller value-added benefits grid — Deep Midnight Navy (brand-blue-500) */}
-      <section className="relative z-10 bg-brand-blue-500 font-sans">
-        <FlexBenefits />
-      </section>
+      {/* Seller value-added benefits grid */}
+      <FlexBenefits />
 
-      {/* Pricing levels and weather discounts — Electric Speed Blue (brand-blue-500) */}
-      <section className="relative z-10 bg-brand-blue-500">
-        <FlexPricing />
-      </section>
+      {/* Pricing levels and weather discounts */}
+      <FlexPricing />
 
-      {/* Step by step streamlined workflow — White Canvas */}
-      <section className="relative z-10 bg-white font-sans">
-        <FlexHowItWorks />
-      </section>
+      {/* Step by step streamlined workflow */}
+      <FlexHowItWorks />
 
-      {/* Active prerequisites for starting — White Canvas */}
-      <section className="relative z-10 bg-white font-sans">
-        <FlexRequirements />
-      </section>
+      {/* Active prerequisites for starting */}
+      <FlexRequirements />
     </main>
   );
 }

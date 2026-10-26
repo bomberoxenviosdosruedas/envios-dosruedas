@@ -95,37 +95,37 @@ export default function FlexPricing() {
         backgroundClassName="bg-brand-blue-500 border-t border-b border-white/10 text-white"
       />
 
-      <div className="bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-float">
-        <div className="bg-brand-blue-500 text-white rounded-xl p-8 relative overflow-hidden text-left border border-white/10 shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div className="lg:col-span-8 space-y-4 text-left">
-              <span className="-rotate-1 inline-block px-4 py-1 bg-brand-yellow-500 text-brand-blue-500 rounded-full text-xs font-subheading uppercase tracking-widest shadow-glow-yellow">
-                Recargo por lluvia
-              </span>
-              <h3 className="text-3xl font-display uppercase tracking-tight text-white">
-                <span className="font-mono tabular-nums">{RAIN_SURCHARGE_PERCENT}%</span> adicional en caso de
-                lluvia
-              </h3>
-              <p className="text-sm text-brand-blue-50 leading-relaxed font-sans max-w-2xl">
-                Para todos nuestros clientes asociados al canal Flex, el recargo por días de lluvia es de solo un{' '}
-                <span className="font-mono tabular-nums">{RAIN_SURCHARGE_PERCENT}%</span> adicional sobre el valor
-                del envío. Cuidamos tu rentabilidad operativa para que sigas vendiendo con tranquilidad.
-              </p>
-            </div>
-
-            <div className="lg:col-span-4 flex justify-start lg:justify-end">
-              <a
-                href="https://api.whatsapp.com/send/?phone=542236602699"
-                target="_blank"
-                rel="noopener noreferrer"
-                id="flex-pricing-cta-whatsapp"
-                className="group inline-flex items-center justify-between gap-3 bg-brand-yellow-500 hover:bg-brand-yellow-400 text-brand-blue-500 font-subheading uppercase tracking-wider px-6 py-3 rounded-full text-sm min-h-12 shadow-glow-yellow transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 w-full sm:w-auto"
-              >
-                <span>Más Información Flex</span>
-                <span className="w-8 h-8 rounded-full bg-transparent flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:translate-x-1">
-                  <Zap className="h-4 w-4 shrink-0 text-brand-blue-500" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-float">
+          <div className="bg-brand-blue-500 text-white rounded-xl p-8 relative overflow-hidden text-left border border-white/10 shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              <div className="lg:col-span-8 space-y-4 text-left">
+                <span className="-rotate-1 inline-block px-4 py-1 bg-brand-yellow-500 text-brand-blue-500 rounded-full text-xs font-subheading uppercase tracking-widest shadow-glow-yellow">
+                  Recargo por lluvia
                 </span>
-              </a>
+                <h3 className="text-3xl font-display uppercase tracking-tight text-white">
+                  <span className="font-mono tabular-nums">{RAIN_SURCHARGE_PERCENT}%</span> adicional en caso de lluvia
+                </h3>
+                <p className="text-sm text-brand-blue-50 leading-relaxed font-sans max-w-2xl">
+                  Para todos nuestros clientes asociados al canal Flex, el recargo por días de lluvia es de solo un{' '}
+                  <span className="font-mono tabular-nums">{RAIN_SURCHARGE_PERCENT}%</span> adicional sobre el valor del envío. Cuidamos tu rentabilidad operativa para que sigas vendiendo con tranquilidad.
+                </p>
+              </div>
+
+              <div className="lg:col-span-4 flex justify-start lg:justify-end">
+                <a
+                  href="https://api.whatsapp.com/send/?phone=542236602699"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="flex-pricing-cta-whatsapp"
+                  className="group inline-flex items-center justify-between gap-3 bg-brand-yellow-500 hover:bg-brand-yellow-400 text-brand-blue-500 font-subheading uppercase tracking-wider px-6 py-3 rounded-full text-sm min-h-12 shadow-glow-yellow transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 w-full sm:w-auto"
+                >
+                  <span>Más Información Flex</span>
+                  <span className="w-8 h-8 rounded-full bg-transparent flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:translate-x-1">
+                    <Zap className="h-4 w-4 shrink-0 text-brand-blue-500" />
+                  </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

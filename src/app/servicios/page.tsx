@@ -321,39 +321,57 @@ export default function ServiciosPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* Hero Section */}
-      <section className="relative bg-brand-blue-500 text-white pt-24 pb-16 lg:pt-32 lg:pb-20 overflow-hidden border-b border-brand-blue-400">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute inset-0 bg-[radial-gradient(#FFEC01_1px,transparent_1px)] bg-size-[16px_16px]" />
+      {/* Hero Section con gradiente canónico y trama vial */}
+      <section className="relative bg-gradient-to-br from-brand-blue-500 via-brand-blue-500 to-brand-blue-400 text-white pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden border-b border-brand-blue-400">
+        <div className="absolute inset-0 opacity-15 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(#FFEC01_1px,transparent_1px)] bg-size-[20px_20px]" />
         </div>
-        <div className="absolute -top-32 -left-32 w-125 h-125 rounded-full pointer-events-none bg-brand-yellow-500/10 blur-[120px]" />
-        <div className="absolute top-1/4 -right-32 w-150 h-150 rounded-full pointer-events-none bg-brand-blue-500/10 blur-[120px]" />
+        <div className="absolute -top-32 -left-32 w-128 h-128 rounded-full pointer-events-none bg-brand-yellow-500/15 blur-[120px]" />
+        <div className="absolute top-1/3 -right-32 w-128 h-128 rounded-full pointer-events-none bg-white/10 blur-[100px]" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-yellow-500 text-brand-blue-500 font-subheading text-xs uppercase font-bold tracking-wider mb-4">
-              <Package className="w-3.5 h-3.5" />
+          <div className="max-w-3xl space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-yellow-500 text-brand-blue-500 font-subheading text-xs uppercase font-bold tracking-wider shadow-glow-yellow">
+              <Package className="w-3.5 h-3.5 fill-current" />
               <span>SEIS SOLUCIONES · UNA FLOTA · MDQ 2026</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display uppercase tracking-tight text-white leading-none">
               NUESTROS <span className="text-brand-yellow-500">SERVICIOS</span>
             </h1>
-            <p className="mt-4 text-base sm:text-lg text-brand-blue-100 font-sans leading-relaxed font-light max-w-2xl">
-              Llegamos a todo Mar del Plata.
-              Tarifas transparentes 2026. Flota propia, base en Friuli 1972.
+            <p className="text-base sm:text-lg text-brand-blue-50 font-sans leading-relaxed font-light max-w-2xl">
+              Llegamos a todo Mar del Plata con cadetería ágil, reparto programado, logística Flex y fulfillment para comercios. Tarifas 2026 publicadas y base en Friuli 1972.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="pt-4 flex flex-wrap gap-4">
               <CTANestedPill href="/cotizar" variant="primary" size="large">
-                Cotizá tu envío
+                Cotizá tu envío ahora
+              </CTANestedPill>
+              <CTANestedPill href="/cobertura" variant="elevated" size="large">
+                Consultar cobertura
               </CTANestedPill>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Grid - 6 cards: 3 cols on lg for 6 items = 2 rows */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-6 relative z-10">
+      {/* Services Grid con fondo Canvas y trama procedural */}
+      <section className="relative z-10 py-16 sm:py-24 bg-white overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(9,80,246,0.05)_1px,transparent_1px)] bg-size-[24px_24px]"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="-rotate-1 inline-block px-4 py-1 bg-brand-blue-50 text-brand-blue-500 rounded-full text-xs font-subheading uppercase tracking-widest border border-brand-blue-100">
+              CATÁLOGO DE LOGÍSTICA
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display uppercase tracking-tight text-brand-blue-500">
+              ELEGÍ LA MODALIDAD PARA TU ENVÍO
+            </h2>
+            <p className="font-sans text-sm sm:text-base text-brand-blue-500/85 leading-relaxed">
+              Desde trámites en el acto hasta depósitos con empaque diario. Hacé clic en cada servicio para ver condiciones y tarifas al detalle.
+            </p>
+          </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => {
             const Icon = service.icon;
@@ -429,18 +447,27 @@ export default function ServiciosPage() {
             );
           })}
         </div>
+        </div>
       </section>
 
-      {/* Comparison Table - 7 columns */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 className="font-display text-3xl sm:text-4xl uppercase text-brand-blue-500">
-            COMPARATIVA RÁPIDA
-          </h2>
-          <p className="font-sans text-sm sm:text-base text-brand-blue-500 mt-2">
-            Elegí el servicio que mejor se adapte a tu necesidad operativa y presupuesto.
-          </p>
-        </div>
+      {/* Comparison Table con fondo teñido y marco Double Bezel */}
+      <section className="relative z-10 py-20 lg:py-28 bg-brand-blue-50/40 border-y border-brand-blue-100/80 overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(9,80,246,0.04)_1px,transparent_1px)] bg-size-[24px_24px]"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="-rotate-1 inline-block px-4 py-1 bg-brand-yellow-500 text-brand-blue-500 rounded-full text-xs font-subheading uppercase tracking-widest shadow-glow-yellow">
+              CUADRO COMPARATIVO
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-brand-blue-500">
+              COMPARÁ CONDICIONES Y TARIFAS
+            </h2>
+            <p className="font-sans text-sm sm:text-base text-brand-blue-500/85">
+              Cada solución está diseñada para un momento operativo específico. Analizá los tiempos de entrega, horarios de corte y tarifas de cada modalidad.
+            </p>
+          </div>
 
         {/* Vista Mobile (<sm) — Tarjetas de Resumen Vertical */}
         <div className="grid grid-cols-1 gap-4 sm:hidden">
@@ -503,7 +530,8 @@ export default function ServiciosPage() {
         </div>
 
         {/* Vista Desktop (sm+) — Tabla clásica */}
-        <div className="hidden sm:block overflow-x-auto rounded-2xl border border-brand-blue-100 bg-white shadow-sm">
+        <div className="hidden sm:block double-bezel-outer bg-white/90 border border-brand-blue-100 p-2 sm:p-3 rounded-3xl shadow-float">
+          <div className="overflow-x-auto rounded-2xl border border-brand-blue-100/60 bg-white shadow-xs">
           <table className="w-full font-sans text-sm">
             <thead>
               <tr className="bg-brand-blue-500 text-white">
@@ -530,6 +558,7 @@ export default function ServiciosPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
 
         <div className="mt-6 text-center">
@@ -538,28 +567,36 @@ export default function ServiciosPage() {
             <Link href="/cobertura" className="underline hover:text-brand-blue-500 font-medium">/cobertura</Link>
           </p>
         </div>
+        </div>
       </section>
 
       {/* CTA Final */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="bg-brand-blue-50/80 border border-brand-blue-100 p-3 rounded-[28px] shadow-float">
-          <div className="bg-white p-6 sm:p-10 rounded-[20px] border border-brand-blue-50/50 shadow-sm text-center">
-            <div className="w-16 h-16 rounded-xl bg-brand-yellow-500 text-brand-blue-500 flex items-center justify-center font-bold mx-auto mb-6">
-              <MessageSquare className="w-8 h-8" />
-            </div>
-            <h3 className="font-subheading text-2xl sm:text-3xl uppercase font-bold text-brand-blue-500 mb-3">
-              ¿CUÁL ES EL SERVICIO IDEAL PARA VOS?
-            </h3>
-            <p className="font-sans text-base sm:text-lg text-brand-blue-500 leading-relaxed max-w-2xl mx-auto mb-6">
-              Te asesoramos sin compromiso. Contanos qué necesitás y te recomendamos la mejor opción.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <CTANestedPill href="https://api.whatsapp.com/send/?phone=542236602699" variant="primary" size="large">
-                Asesorame por WhatsApp
-              </CTANestedPill>
-              <CTANestedPill href="/cobertura" variant="elevated" size="large">
-                Ver Cobertura
-              </CTANestedPill>
+      <section className="relative z-10 py-20 lg:py-28 bg-white overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="double-bezel-outer bg-brand-blue-50/80 border border-brand-blue-100 p-3 sm:p-4 rounded-[32px] shadow-float">
+            <div className="bg-white p-8 sm:p-14 rounded-[24px] border border-brand-blue-100/60 shadow-sm text-center relative overflow-hidden space-y-6">
+              <div className="w-16 h-16 rounded-2xl bg-brand-yellow-500 text-brand-blue-500 flex items-center justify-center font-bold mx-auto shadow-glow-yellow">
+                <MessageSquare className="w-8 h-8" />
+              </div>
+              <div className="space-y-3 max-w-2xl mx-auto">
+                <span className="-rotate-1 inline-block px-4 py-1 bg-brand-blue-50 text-brand-blue-500 rounded-full text-xs font-subheading uppercase tracking-widest border border-brand-blue-100">
+                  ATENCIÓN PERSONALIZADA
+                </span>
+                <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-brand-blue-500">
+                  ¿CUÁL ES EL SERVICIO IDEAL PARA VOS?
+                </h3>
+                <p className="font-sans text-base sm:text-lg text-brand-blue-500/85 leading-relaxed">
+                  Te asesoramos sin compromiso. Contanos qué necesitás enviar y te recomendamos la opción más conveniente para tu presupuesto.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+                <CTANestedPill href="https://api.whatsapp.com/send/?phone=542236602699" variant="primary" size="large">
+                  Asesorame por WhatsApp
+                </CTANestedPill>
+                <CTANestedPill href="/cobertura" variant="elevated" size="large">
+                  Ver Mapa de Cobertura
+                </CTANestedPill>
+              </div>
             </div>
           </div>
         </div>

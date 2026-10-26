@@ -33,7 +33,7 @@ export default function LowCostBenefits() {
   return (
     <section 
       id="lowcost-benefits" 
-      className="py-24 bg-brand-blue-500 relative z-10 overflow-hidden border-t border-b border-white/10 text-white"
+      className="py-24 bg-brand-blue-50/40 relative z-10 overflow-hidden border-t border-b border-brand-blue-100/70 text-brand-blue-500"
     >
       <motion.div 
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
@@ -48,13 +48,13 @@ export default function LowCostBenefits() {
         
         {/* Header Block */}
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-          <span className="-rotate-1 inline-block px-4 py-1.5 bg-brand-yellow-500 text-brand-blue-500 rounded-full text-xs font-subheading uppercase tracking-widest shadow-glow-yellow">
+          <span className="-rotate-1 inline-block px-4 py-1.5 bg-brand-blue-500 text-brand-yellow-500 rounded-full text-xs font-subheading uppercase tracking-widest shadow-sm">
             VENTAJAS CLAVE
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display uppercase tracking-tight text-white leading-[0.98]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display uppercase tracking-tight text-brand-blue-500 leading-[0.98]">
             BENEFICIOS LOWCOST
           </h2>
-          <p className="text-brand-blue-50 font-sans text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+          <p className="text-brand-blue-500/85 font-sans text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
             La combinación perfecta entre economía inteligente y máxima eficiencia logística para la consolidación de tu negocio.
           </p>
           <div className="h-1.5 w-16 bg-brand-yellow-500 mx-auto rounded-full" />
