@@ -1,14 +1,12 @@
 import React from 'react';
 import { Calculator, Bike, Zap, CheckCircle2 } from 'lucide-react';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 
 export default function CotizadorHero() {
   return (
     <section className="bg-brand-blue-500 text-white pt-14 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-      {/* Background tech grid */}
-      <div 
-        className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:24px_24px]" 
-        aria-hidden="true" 
-      />
+      {/* Background procedural topology */}
+      <HeroProceduralBackground />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-wrap items-center gap-2 mb-4">

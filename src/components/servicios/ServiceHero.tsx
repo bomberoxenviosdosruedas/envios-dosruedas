@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { LucideIcon, ArrowRight, MessageCircle, Calculator } from 'lucide-react';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 
 interface ServiceHeroProps {
   title: string;
@@ -23,11 +24,8 @@ export default function ServiceHero({
 
   return (
     <section className="bg-brand-blue-500 text-white pt-14 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-brand-yellow-500">
-      {/* Background grid */}
-      <div 
-        className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:24px_24px]" 
-        aria-hidden="true" 
-      />
+      {/* Background procedural topology */}
+      <HeroProceduralBackground />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex items-center gap-3 mb-4">

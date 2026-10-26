@@ -13,14 +13,13 @@ import {
   Clock,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { HeroProceduralBackground } from '@/components/ui/HeroProceduralBackground';
 
 export default function HeroAnimado() {
   return (
     <section className="relative bg-brand-blue-500 text-white pt-16 pb-24 md:pt-24 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Patrón de fondo abstracto y red vial */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(#FFEC01_1px,transparent_1px)] [background-size:24px_24px]" />
-      </div>
+      {/* Fondo procedimental de topología logística vial */}
+      <HeroProceduralBackground />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
