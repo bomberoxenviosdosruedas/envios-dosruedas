@@ -212,6 +212,9 @@ importers:
         specifier: ^3.7.0
         version: 3.7.0
     devDependencies:
+      '@prisma/composer':
+        specifier: ^0.34.0
+        version: 0.34.0(fbfa7f208f43730b0492f54d752e64d5)
       '@tailwindcss/turbopack':
         specifier: ^4.3.3
         version: 4.3.3
