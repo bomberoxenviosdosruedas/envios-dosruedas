@@ -1,333 +1,330 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'motion/react';
+import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
+import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react';
 import {
-  Menu,
-  X,
-  ChevronDown,
-  Calculator,
-  Zap,
-  Truck,
-  Package,
-  Building2,
-  Banknote,
-  Sparkles,
-  MapPin,
-  Users,
-  Phone,
+  Menu, X, ChevronDown, Bike, ChevronRight, Phone,
+  Home, Zap, TrendingDown, Clock, Info, HelpCircle, Share2, Mail,
+  LayoutGrid, Building2, Package, Store, Search, UtensilsCrossed
 } from 'lucide-react';
+import { CTANestedPill } from '@/components/ui/CTANestedPill';
+import { SUPPORT_PHONE } from '@/lib/promises';
+import { trackAnalytics } from '@/lib/analytics';
 
-const serviciosLinks = [
+const PHONE_HREF = `tel:+${SUPPORT_PHONE.replace(/\D/g, '')}`;
+const PHONE_DISPLAY_SHORT = SUPPORT_PHONE.replace(/^\+54\s*/, '');
+
+const MobileNav = dynamic(() => import('./MobileNav'), { ssr: false });
+
+export interface NavItem {
+  label: string;
+  href?: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  dropdownItems?: { label: string; href: string; icon?: React.ComponentType<{ className?: string }> }[];
+}
+
+const EASE_MOUNT = { duration: 0.45, ease: [0.25, 0.8, 0.25, 1] } as const;
+
+// NAV ITEMS - Static data, move outside component to avoid recreation on every render
+const NAV_ITEMS: NavItem[] = [
+  { label: 'Inicio', href: '/', icon: Home },
   {
-    name: 'Envíos Express (3 hs)',
-    href: '/servicios/envios-express',
-    desc: 'Despachos punto a punto urgentes. Corte 15:00 hs',
-    icon: Zap,
+    label: 'Servicios',
+    icon: Bike,
+    dropdownItems: [
+      { label: 'Todos los Servicios', href: '/servicios', icon: LayoutGrid },
+      { label: 'Envíos Express', href: '/servicios/envios-express', icon: Zap },
+      { label: 'Envíos LowCost', href: '/servicios/envios-lowcost', icon: TrendingDown },
+      { label: 'Envíos Flex (MeLi)', href: '/servicios/enviosflex', icon: Clock },
+      { label: 'Cuenta Corriente Flexible', href: '/servicios/empresas-cuenta-corriente', icon: Building2 },
+      { label: 'E-commerce 24HS', href: '/servicios#ecommerce-24hs', icon: Package },
+      { label: 'E-commerce Same Day', href: '/servicios/deposito-fulfillment', icon: Store },
+    ],
   },
   {
-    name: 'Envíos LowCost en el Día',
-    href: '/servicios/envios-lowcost',
-    desc: 'Reparto económico hasta las 19:00 hs. Corte 13:00 hs',
-    icon: Truck,
+    label: 'Plataformas',
+    icon: LayoutGrid,
+    dropdownItems: [
+      { label: 'Logística DosRuedas', href: '/logistica-dosruedas', icon: Search },
+      { label: 'MarDelivery Gastronomía', href: '/mardelivery', icon: UtensilsCrossed },
+    ],
   },
   {
-    name: 'Mercado Envíos Flex',
-    href: '/servicios/enviosflex',
-    desc: 'Entregas Same-Day en Mar del Plata para tu reputación',
-    icon: Sparkles,
+    label: 'Nosotros',
+    icon: Info,
+    dropdownItems: [
+      { label: 'Portal Nosotros', href: '/nosotros', icon: LayoutGrid },
+      { label: 'Sobre Nosotros', href: '/nosotros/sobre-nosotros', icon: Info },
+      { label: 'Preguntas Frecuentes', href: '/nosotros/preguntas-frecuentes', icon: HelpCircle },
+      { label: 'Nuestras Redes', href: '/nosotros/nuestras-redes', icon: Share2 },
+    ],
   },
-  {
-    name: 'Depósito & Fulfillment',
-    href: '/servicios/deposito-fulfillment',
-    desc: 'Almacenaje y armado de pedidos en Friuli 1972',
-    icon: Package,
-  },
-  {
-    name: 'Empresas & Cta. Cte.',
-    href: '/servicios/empresas-cuenta-corriente',
-    desc: 'Facturación unificada y cuenta corriente corporativa',
-    icon: Building2,
-  },
-  {
-    name: 'Envíos Contra Reembolso',
-    href: '/servicios/envios-contrareembolso',
-    desc: 'Cobro en efectivo al entregar con liquidación 24 hs',
-    icon: Banknote,
-  },
-  {
-    name: 'Plan Emprendedores',
-    href: '/servicios/plan-emprendedores',
-    desc: 'Tarifas con descuento para tiendas y showrooms locales',
-    icon: Sparkles,
-  },
+  { label: 'Contacto', href: '/contacto', icon: Mail },
 ];
 
 export default function OptimizedHeader() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [serviciosOpen, setServiciosOpen] = useState(false);
-  const [mobileServiciosOpen, setMobileServiciosOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const prefersReducedMotion = useReducedMotion();
+  const prevPathRef = useRef(pathname);
+
+  // Memoize dropdown variants to avoid recreation on every render
+  const dropdownContainer = useMemo<Variants>(() => ({
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 4, scale: prefersReducedMotion ? 1 : 0.97 },
+    visible: {
+      opacity: 1, y: 0, scale: 1,
+      transition: { type: 'spring', stiffness: 420, damping: 28, staggerChildren: prefersReducedMotion ? 0 : 0.03, delayChildren: 0.01 },
+    },
+    exit: { opacity: 0, y: prefersReducedMotion ? 0 : 4, scale: prefersReducedMotion ? 1 : 0.97, transition: { duration: 0.14, ease: [0.23, 1, 0.32, 1] } },
+  }), [prefersReducedMotion]);
+
+  const dropdownItem = useMemo<Variants>(() => ({
+    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : -8 },
+    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 400, damping: 28 } },
+  }), [prefersReducedMotion]);
+
+  const handleDropdownToggle = useCallback((label: string) => {
+    setActiveDropdown(prev => (prev === label ? null : label));
+  }, []);
+
+  const handleCloseMobileNav = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // FIX ESLINT react-hooks/set-state-in-effect: cierra drawer al cambiar ruta sin setState sincrónico en effect
+  // Usamos ref + async microtask para no ser sincrónico
+  useEffect(() => {
+    if (prevPathRef.current !== pathname) {
+      prevPathRef.current = pathname;
+      // Solo si está abierto, lo cerramos en próximo tick (no sincrónico)
+      if (isOpen || activeDropdown) {
+        const id = setTimeout(() => {
+          setIsOpen(false);
+          setActiveDropdown(null);
+        }, 0);
+        return () => clearTimeout(id);
+      }
+    }
+  }, [pathname, isOpen, activeDropdown]);
+
+  // Cerrar desplegable desktop con Escape
+  useEffect(() => {
+    if (!activeDropdown) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveDropdown(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeDropdown]);
+
+  // Lock scroll robusto
+  useEffect(() => {
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isOpen]);
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-white/95 border-b border-brand-blue-100/60 shadow-tinted-sm transition-colors duration-200">
-      {/* Franja superior de marca */}
-      <div className="h-1 w-full bg-brand-yellow-500" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Logotipo Oficial */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:ring-offset-2 rounded-lg"
-          aria-label="Envíos DosRuedas - Inicio"
-        >
-          <div className="relative w-10 h-10 rounded-full bg-brand-blue-500 flex items-center justify-center p-1.5 shadow-tinted-sm group-hover:scale-105 transition-transform duration-200">
-            <Image
-              src="/LogoEnviosDosRuedas.png"
-              alt="Logo Envíos DosRuedas"
-              width={40}
-              height={40}
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display text-2xl uppercase tracking-tight text-brand-blue-500 leading-none group-hover:text-brand-blue-400 transition-colors">
-              ENVÍOS DOSRUEDAS
-            </span>
-            <span className="font-subheading text-xs tracking-wider uppercase text-brand-blue-400 font-bold">
-              Mar del Plata · Flota Propia
-            </span>
-          </div>
-        </Link>
-
-        {/* Navegación Desktop */}
-        <nav className="hidden md:flex items-center gap-6" aria-label="Menú principal">
-          {/* Dropdown Servicios */}
-          <div
-            className="relative"
-            onMouseEnter={() => setServiciosOpen(true)}
-            onMouseLeave={() => setServiciosOpen(false)}
-          >
-            <button
-              onClick={() => setServiciosOpen(!serviciosOpen)}
-              className="font-subheading text-lg font-bold uppercase tracking-wider text-brand-blue-500 hover:text-brand-blue-400 flex items-center gap-1.5 py-2 transition-colors focus:outline-none"
-              aria-expanded={serviciosOpen}
-              aria-haspopup="true"
-            >
-              Servicios
-              <ChevronDown
-                className={`w-4 h-4 transition-transform duration-200 ${
-                  serviciosOpen ? 'rotate-180 text-brand-yellow-500' : ''
-                }`}
-              />
-            </button>
-
-            <AnimatePresence>
-              {serviciosOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                  transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-                  className="absolute left-0 mt-1 w-96 rounded-2xl bg-white border border-brand-blue-100 shadow-tinted-lg p-3 z-50"
-                >
-                  <div className="px-3 py-2 border-b border-brand-blue-50 mb-2">
-                    <span className="font-subheading text-xs uppercase tracking-wider text-brand-blue-400 font-bold">
-                      Soluciones de Logística en MdP
-                    </span>
-                  </div>
-                  <div className="space-y-1">
-                    {serviciosLinks.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setServiciosOpen(false)}
-                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-brand-blue-50/80 transition-colors group"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-brand-blue-50 text-brand-blue-500 flex items-center justify-center shrink-0 group-hover:bg-brand-blue-500 group-hover:text-white transition-colors">
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <div className="font-subheading text-base font-bold uppercase text-brand-blue-500 group-hover:text-brand-blue-400">
-                              {item.name}
-                            </div>
-                            <div className="text-xs text-brand-blue-400 font-sans line-clamp-1">
-                              {item.desc}
-                            </div>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                  <div className="pt-2 mt-2 border-t border-brand-blue-50">
-                    <Link
-                      href="/servicios"
-                      onClick={() => setServiciosOpen(false)}
-                      className="block text-center text-xs font-subheading uppercase font-bold text-brand-blue-500 hover:text-brand-blue-400 py-1"
-                    >
-                      Ver Catálogo Completo →
-                    </Link>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <Link
-            href="/cobertura"
-            className="font-subheading text-lg font-bold uppercase tracking-wider text-brand-blue-500 hover:text-brand-blue-400 transition-colors"
-          >
-            Cobertura
-          </Link>
-
-          <Link
-            href="/nosotros"
-            className="font-subheading text-lg font-bold uppercase tracking-wider text-brand-blue-500 hover:text-brand-blue-400 transition-colors"
-          >
-            Nosotros
-          </Link>
-
-          <Link
-            href="/contacto"
-            className="font-subheading text-lg font-bold uppercase tracking-wider text-brand-blue-500 hover:text-brand-blue-400 transition-colors"
-          >
-            Contacto
-          </Link>
-        </nav>
-
-        {/* CTA Primario Desktop */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/cotizar"
-            className="bg-brand-yellow-500 hover:bg-brand-yellow-400 active:bg-brand-yellow-600 text-brand-blue-500 px-6 py-2.5 rounded-full font-subheading font-bold uppercase text-lg tracking-wider shadow-accent-sm transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] inline-flex items-center gap-2"
-          >
-            <Calculator className="w-5 h-5" /> COTIZAR ONLINE
-          </Link>
-        </div>
-
-        {/* Botón Móvil Hamburguesa */}
-        <div className="flex md:hidden items-center gap-2">
-          <Link
-            href="/cotizar"
-            className="bg-brand-yellow-500 text-brand-blue-500 px-3.5 py-1.5 rounded-full font-subheading font-bold uppercase text-sm tracking-wider shadow-xs"
-          >
-            Cotizar
-          </Link>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-brand-blue-500 hover:bg-brand-blue-50 focus:outline-none"
-            aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Menú Desplegable Móvil */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-            className="md:hidden border-t border-brand-blue-100 bg-white/98 backdrop-blur-lg overflow-hidden"
-          >
-            <div className="px-4 pt-4 pb-6 space-y-3">
-              {/* Sección Servicios Colapsable */}
-              <div>
-                <button
-                  onClick={() => setMobileServiciosOpen(!mobileServiciosOpen)}
-                  className="w-full flex items-center justify-between py-2 text-left font-subheading text-xl font-bold uppercase text-brand-blue-500 tracking-wider"
-                >
-                  <span>Servicios</span>
-                  <ChevronDown
-                    className={`w-5 h-5 transition-transform duration-200 ${
-                      mobileServiciosOpen ? 'rotate-180 text-brand-yellow-500' : ''
-                    }`}
+    <>
+      <header
+        id="optimized-header"
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-[background-color,border-color,box-shadow,padding] duration-300 ${
+          scrolled ? 'bg-brand-blue-500/95 shadow-elevated border-b border-white/10 py-2.5 backdrop-blur-md' : 'bg-brand-blue-500 py-4 border-b border-transparent'
+        }`}
+      >
+        <motion.div initial={prefersReducedMotion ? false : { opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={EASE_MOUNT} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <Link href="/" id="nav-logo-opt" aria-current={pathname === '/' ? 'page' : undefined} className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 rounded-xl">
+              <div className="flex items-center gap-2.5">
+                <motion.div className="relative w-10 h-10 shrink-0" whileHover={prefersReducedMotion ? {} : { rotate: 8, scale: 1.04 }} whileTap={prefersReducedMotion ? {} : { scale: 0.97 }} transition={{ type: 'spring', duration: 0.22, bounce: 0.15 }}>
+                  <Image
+                    src="/logo-envios-simplified.webp"
+                    alt="Logo Envíos Dos Ruedas"
+                    fill
+                    sizes="40px"
+                    className="object-contain"
+                    priority
                   />
-                </button>
-
-                <AnimatePresence>
-                  {mobileServiciosOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="pl-3 pr-1 py-1 space-y-2 border-l-2 border-brand-yellow-500 my-2"
-                    >
-                      {serviciosLinks.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="block text-sm font-subheading font-bold uppercase text-brand-blue-400 hover:text-brand-blue-500 py-1"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                      <Link
-                        href="/servicios"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block text-xs font-bold uppercase text-brand-blue-500 pt-1"
-                      >
-                        Ver todos los servicios →
-                      </Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                </motion.div>
+                <span className="font-display text-2xl sm:text-3xl tracking-tight leading-none uppercase select-none flex flex-col sm:flex-row sm:gap-1 items-start sm:items-center">
+                  <span className="text-white kinetic-font-stretch">Envíos</span>
+                  <span className="text-brand-yellow-500 kinetic-font-stretch">DosRuedas</span>
+                </span>
               </div>
+            </Link>
 
-              <Link
-                href="/cobertura"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 py-2 font-subheading text-xl font-bold uppercase text-brand-blue-500 tracking-wider hover:text-brand-blue-400"
+            <nav id="desktop-nav-opt" aria-label="Navegación principal" className="hidden lg:flex items-center gap-2">
+              {NAV_ITEMS.map((item) => {
+                const isDirectActive = item.href ? pathname === item.href : false;
+                const isGroupActive = item.dropdownItems
+                  ? item.dropdownItems.some((sub) => pathname === sub.href.split('#')[0] && sub.href !== '/servicios#ecommerce-24hs')
+                  : false;
+
+                return (
+                  <div
+                    key={item.label}
+                    className="relative"
+                    onMouseEnter={() => item.dropdownItems && setActiveDropdown(item.label)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+                        setActiveDropdown((prev) => (prev === item.label ? null : prev));
+                      }
+                    }}
+                  >
+                    {item.href ? (
+                      <Link
+                        href={item.href}
+                        aria-current={isDirectActive ? 'page' : undefined}
+                        className={`px-4 py-2.5 rounded-xl text-base font-subheading uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 ${
+                          isDirectActive
+                            ? 'text-brand-yellow-500 bg-white/10'
+                            : 'text-white hover:text-brand-yellow-500 hover:bg-white/10'
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleDropdownToggle(item.label)}
+                        aria-haspopup="true"
+                        aria-expanded={activeDropdown === item.label}
+                        className={`px-4 py-2.5 rounded-xl text-base font-subheading uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 ${
+                          isGroupActive
+                            ? 'text-brand-yellow-500 bg-white/10'
+                            : 'text-white hover:text-brand-yellow-500 hover:bg-white/10'
+                        }`}
+                      >
+                        {item.label}
+                        <ChevronDown className={`h-4 w-4 transition-transform ${activeDropdown === item.label ? 'rotate-180' : ''}`} aria-hidden="true" />
+                      </button>
+                    )}
+                    <AnimatePresence>
+                      {item.dropdownItems && activeDropdown === item.label && (
+                        <motion.div
+                          variants={dropdownContainer}
+                          initial="hidden"
+                          animate="visible"
+                          exit="exit"
+                          style={{ transformOrigin: 'top left' }}
+                          className="absolute left-0 pt-2 w-64 z-50"
+                        >
+                          <div className="bg-brand-blue-500 rounded-2xl shadow-2xl border border-white/15 py-2.5 text-white overflow-hidden">
+                            <div className="flex flex-col gap-1 px-2">
+                              {item.dropdownItems.map((subItem) => {
+                                const SubIcon = subItem.icon || ChevronRight;
+                                const isSubActive = pathname === subItem.href;
+                                return (
+                                  <motion.div key={subItem.href} variants={dropdownItem}>
+                                    <Link
+                                      href={subItem.href}
+                                      aria-current={isSubActive ? 'page' : undefined}
+                                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-white/10 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 ${
+                                        isSubActive ? 'text-brand-yellow-500 bg-white/10' : 'text-white hover:text-brand-yellow-500'
+                                      }`}
+                                    >
+                                      <div className="p-1.5 rounded-lg bg-white/10 text-brand-blue-50 group-hover:bg-brand-yellow-500 group-hover:text-brand-blue-500 transition-colors shrink-0" aria-hidden="true">
+                                        <SubIcon className="h-4 w-4" />
+                                      </div>
+                                      <span className="text-base font-bold uppercase font-subheading tracking-wider leading-none">{subItem.label}</span>
+                                    </Link>
+                                  </motion.div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </nav>
+
+            <div className="hidden lg:flex items-center gap-5">
+              <a
+                href={PHONE_HREF}
+                onClick={() => trackAnalytics.phoneClick(SUPPORT_PHONE, 'header_desktop')}
+                className="flex items-center gap-2 text-white hover:text-brand-yellow-500 transition-colors font-mono text-base font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 rounded-lg px-1"
               >
-                <MapPin className="w-5 h-5" /> Cobertura MdP
-              </Link>
-
-              <Link
-                href="/nosotros"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 py-2 font-subheading text-xl font-bold uppercase text-brand-blue-500 tracking-wider hover:text-brand-blue-400"
-              >
-                <Users className="w-5 h-5" /> Nosotros
-              </Link>
-
-              <Link
-                href="/contacto"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 py-2 font-subheading text-xl font-bold uppercase text-brand-blue-500 tracking-wider hover:text-brand-blue-400"
-              >
-                <Phone className="w-5 h-5" /> Contacto & Base
-              </Link>
-
-              <div className="pt-4 border-t border-brand-blue-100 flex flex-col gap-2">
-                <Link
+                <Phone className="h-4 w-4 text-brand-yellow-500" aria-hidden="true" />
+                <span>{PHONE_DISPLAY_SHORT}</span>
+              </a>
+              <div className="relative">
+                {!(pathname === '/' || pathname.startsWith('/servicios') || pathname.startsWith('/cotizar')) && !prefersReducedMotion && (
+                  <motion.span className="absolute inset-0 rounded-full bg-brand-yellow-500/25 pointer-events-none" animate={{ scale: [1, 1.18, 1], opacity: [0.6, 0, 0.6] }} transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.5 }} />
+                )}
+                <CTANestedPill
+                  id="header_cta"
                   href="/cotizar"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full bg-brand-yellow-500 active:bg-brand-yellow-600 text-brand-blue-500 text-center py-3 rounded-full font-subheading font-bold uppercase text-lg tracking-wider shadow-accent-sm flex items-center justify-center gap-2"
+                  variant={(pathname === '/' || pathname.startsWith('/servicios') || pathname.startsWith('/cotizar')) ? 'outline' : 'primary'}
+                  size="default"
+                  className={
+                    (pathname === '/' || pathname.startsWith('/servicios') || pathname.startsWith('/cotizar'))
+                      ? 'border-white/40 text-white hover:bg-white/10 hover:border-white focus-visible:ring-brand-yellow-500 focus-visible:ring-offset-brand-blue-500'
+                      : ''
+                  }
+                  iconClassName={
+                    (pathname === '/' || pathname.startsWith('/servicios') || pathname.startsWith('/cotizar'))
+                      ? 'text-brand-yellow-500 group-hover:bg-brand-yellow-500 group-hover:text-brand-blue-500'
+                      : undefined
+                  }
                 >
-                  <Calculator className="w-5 h-5" /> Cotizar Online
-                </Link>
-                <a
-                  href="https://wa.me/5492236602699?text=Hola!%20Quiero%20hacer%20un%20env%C3%ADo%20en%20Mar%20del%20Plata"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-brand-blue-50 text-brand-blue-500 text-center py-2.5 rounded-full font-subheading font-bold uppercase text-sm tracking-wider border border-brand-blue-200"
-                >
-                  WhatsApp: +54 9 223 660-2699
-                </a>
+                  Cotizá tu envío
+                </CTANestedPill>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+
+            <div className="lg:hidden flex items-center gap-3">
+              <a
+                href={PHONE_HREF}
+                onClick={() => trackAnalytics.phoneClick(SUPPORT_PHONE, 'header_mobile')}
+                className="p-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white hover:text-brand-yellow-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 transition-all min-w-11 min-h-11 flex items-center justify-center"
+                aria-label="Llamar"
+              >
+                <Phone className="h-5 w-5 text-brand-yellow-500" aria-hidden="true" />
+              </a>
+              <button onClick={() => setIsOpen(!isOpen)} id="mobile-menu-toggle-opt" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white hover:text-brand-yellow-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow-500 transition-all cursor-pointer min-w-11 min-h-11 flex items-center justify-center" aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={isOpen} aria-controls="mobile-navigation-dialog">
+                <AnimatePresence mode="wait" initial={false}>
+                  {isOpen ? (
+                    <motion.span key="close" initial={prefersReducedMotion ? false : { rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={prefersReducedMotion ? {} : { rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}><X className="h-6 w-6" /></motion.span>
+                  ) : (
+                    <motion.span key="menu" initial={prefersReducedMotion ? false : { rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={prefersReducedMotion ? {} : { rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}><Menu className="h-6 w-6" /></motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </header>
+
+      <AnimatePresence>{isOpen && <MobileNav isOpen={isOpen} onClose={handleCloseMobileNav} navItems={NAV_ITEMS} activeDropdown={activeDropdown} onDropdownToggle={handleDropdownToggle} />}</AnimatePresence>
+    </>
   );
 }
